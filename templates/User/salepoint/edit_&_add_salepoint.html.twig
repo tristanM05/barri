@@ -1,0 +1,50 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}
+    {% if isEdit %}
+        <h1>Edition d'un point de vente</strong></h1>
+    {% else %}
+        <h1>Ajout d'un point de vente :</h1>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        
+        <div class="row col-lg-12">
+        
+            {# DISPLAYS THE FLASH MESSAGES #}
+                {% include "Partials/flash_message.html.twig" %}
+            {# END DISPLAYS THE FLASH MESSAGES #}
+            
+            {# CHECK IF IT IS INDEED THE CUSTOMER'S SALEPOINT OR IF THE ROUTE ALLOWS TO ADD #}
+                {% if app.user == salepoint.client or app.request.pathInfo == '/user/salepoint/add'%}
+                    {# ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+                        {% if isEdit %}
+                            <h1>Edition du point de vente : <strong>{{salepoint.wording}}</strong></h1>
+                        {% else %}
+                            <h1>Ajout d'un point de vente :</h1>
+                        {% endif %}
+                    {# END ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+
+                    <div class="col-lg-12">
+                        {{form_start(form_salepoint)}}
+                            {{form_row(form_salepoint.wording)}}
+                            {{form_row(form_salepoint.visible)}}
+                            {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                                <button type="submit" class="btn btn-success" {{ not app.user.ispremium ? "disabled" }}>Enregistrer les modifications</button>
+                            {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                            
+                            <a href="{{path('user_salepoints')}}" class="btn btn-danger">Annuler</a>
+                        {{form_end(form_salepoint)}}
+                        
+                    </div>
+                {% else %}
+                    <p class="alert alert-danger">Cette page n'est pas disponible</p>
+                    <a href="{{path('user_salepoints')}}">Revenir sur mes points de vente</a>
+                {% endif %}
+            {# CHECK IF IT IS INDEED THE CUSTOMER'S FAMILY OR IF THE ROUTE ALLOWS TO ADD #}
+            
+        </div>
+    </div>
+{% endblock %}

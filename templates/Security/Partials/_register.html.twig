@@ -1,0 +1,74 @@
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+  aria-hidden="true" id="modalRegister">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title title" id="exampleModalLabel">Inscrivez-vous gratuitement sur Barri.fr</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{form_start(form)}}
+        <div class="row pt-5 p-0 m-0">
+          <div class="col-5 border ml-5">
+            <h2 class="title">Informations principales</h2>
+            <div class="form-row ">
+              <div class="form-group mb-0" style="width:49%">
+                {{form_row(form.last_name)}}
+              </div>
+              <div class="form-group ml-2 mb-0" style="width:49%">
+                {{form_row(form.first_name)}}
+              </div>
+            </div>
+            <div>
+              {{form_row(form.email)}}
+              {{form_row(form.pass)}}
+              <div id="eyepass">
+                <i class="icon fas fa-eye"></i>
+                <i class="icon fas fa-eye-slash"></i>
+              </div>
+              {{form_row(form.passwordVerification)}}
+              <div id="eyepass2">
+                <i class="icon2 eye fas fa-eye"></i>
+                <i class="icon2 eyeoff fas fa-eye-slash"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-1"></div>
+
+          <div class="col-5 border">
+            <h2 class="title">Informations complémentaires</h2>
+            {{form_row(form.adress)}}
+            {{form_row(form.postcode)}}
+            {{form_row(form.city)}}
+            {{form_row(form.phone)}}
+
+          </div>
+          <div class="col-12 pt-5">
+            <div class="d-flex">
+              <i class="fas fa-info-circle">Tous les champs sont obligatoires</i><br>
+              <div class="d-flex ml-auto checkRegister">
+                {{form_row(form.check)}}
+                <label for="check">Veuillez accepter notre
+                  <a href="{{path('pdf_view')}}" target="blank">politique de confidentialité</a> avant votre inscription.
+                </label>
+              </div>
+            </div>
+            <div class="justify-content-center text-center pt-1 pb-2">
+              <button type="button" class="btn action_button" data-dismiss="modal" data-toggle="modal"
+                data-target="#modalLogin" style="width:49%;">J'ai déjà un compte</button>
+              <button type="submit" class="btn action_button" style="width:50%;">S'enregistrer</button>
+            </div>
+          </div>
+        </div>
+        {{form_end(form)}}
+      </div>
+      {# <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">S'enregistrer</button>
+      </div> #}
+    </div>
+  </div>
+</div>

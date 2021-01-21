@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="modalSoldProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title title" id="exampleModalCenterTitle">Vente d'un article</h5>
+        <button type="button" class="close" data-dismiss="modal" data-backdrop="false" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{path('user_sold_article_v2')}}" method="POST">
+        <div class="modal-body">
+
+          <div class="form-group teso">
+            <label for="number">Code barre</label>
+            <input type="text" name="number" class="form-control" id="scanner_input">
+            {# SPAN FOR READ THE CODE BARRE ON PHONE #}
+            <span class="input-group-btn" style="display:none" id="span_quagga">
+              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#livestream_scanner">
+                <i class="fa fa-barcode"></i>
+              </button>
+            </span>
+            {# END SPAN FOR READ THE CODE BARRE ON PHONE #}
+          </div>
+
+          <div>
+            {% for article in products %}
+            <input type="hidden" name="keepSpecialPrice{{article.id}}" id="keepSpecialPrice{{article.id}}"
+              value="{{article.specialPrice}}">
+            {% endfor %}
+          </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn action_button" data-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn action_button">Valider</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% include "User/partials/scanner_modal.html.twig" %}

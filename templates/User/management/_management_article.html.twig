@@ -1,0 +1,35 @@
+<div class="imgbarri2 row">
+    <div class="col-4 mt-3 text-center">
+        <div class="text-dark min-height-management-success">
+            {% for superTopArticle in superTop %}
+                <p class="stop p-0 m-0">{{superTopArticle[0]}}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# <div class="col-1 div1">
+        <div class="horizontal_hr">
+        </div>
+    </div> #}
+
+    <div class="col-4 mt-3 text-center">
+        <div class="text-dark min-height-management-warning">
+            {% for topArticle in top %}
+                <p class="top p-0 m-0">{{topArticle[0]}}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# <div class="col-1 div1">
+        <div class="horizontal_hr">
+        </div>
+    </div> #}
+
+    <div class="col-4 mt-3 text-center">
+        <div class="text-dark min-height-management-danger">
+            {% for notTopArticle in notTop %}
+                <p class="ptop p-0 m-0">{{notTopArticle[0]}}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>

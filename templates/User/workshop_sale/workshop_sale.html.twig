@@ -1,0 +1,160 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Vente atelier{% endblock %}
+
+{% block body %}
+
+    <div class="container pb-5" onclick="functionTest(2)">
+        <div class="row">
+            <div class="text-center titlesold">
+                <img src="{{ asset('build/data/soldtitle.png') }}" alt="Login_image" class="img-fluid TitleBan2">
+            </div>
+            <div class="col-12 divsold">
+                {# DISPLAYS THE FLASH MESSAGES #}
+                    {% include "Partials/flash_message.html.twig" %}
+                {# END DISPLAYS THE FLASH MESSAGES #}
+
+                <a role="button" class="sold_button btn text-light" data-toggle="modal" data-target="#modalSoldProduct"id="sold_product"><i class="fas fa-plus"></i> Vendre un article</a>
+
+                <div class="border mt-5 justify-content-center" id="contenu">
+                    {% if articles | length > 0 %}
+                        <table class="table text-center" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prix (€)</th>
+                                    <th>Prix spécial (€)</th>
+                                    <th>Date de vente</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% set somme = 0 %}
+                                {% for article in articles %}
+                                    <tr class="border">
+                                    
+                                        <td>{{article.article.designation}}</td>
+                                        <td>{{article.article.referenceprice}}</td>
+                                        <div class="div_input{{article.article.id}}">
+                                            <td 
+                                                id="special_price{{article.article.id}}"
+                                                ondblclick="modify({{article.article.id}})" style="display:none;">
+                                                {{article.article.specialprice}}
+                                            </td>
+                                            <td id="input{{article.article.id}}" class="td_width"  >
+                                                <form action="{{ path('user_sold_article') }}" method="POST" onkeydown="return event.key != 'Enter';">
+                                                    <input type="text" 
+                                                    class="form-control ml-5" 
+                                                    id="inputValue{{article.article.id}}"
+                                                    name="{{article.article.id}}"
+                                                    style="width:50%" 
+                                                    value="{{article.article.specialprice}}" onchange="functionTest({{article.article.id}})">
+                                        </div>
+                                        <td class="td_width">
+                                            <input type="text" class="form-control" id="soldArticle{{article.article.id}}" value="{{dateNow}}" name="datede{{article.article.id}}">
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('user_cart_remove_article', {'id':article.article.id}) }}" class="btn action_button"><i class="fas fa-trash"></i></a></a>
+                                        </td>
+                                    </tr>
+                                    
+                                    {% if article.article.specialprice %}
+                                        {% set somme = somme+ article.article.specialprice %}
+                                    {% else %}
+                                        {% set somme = somme+ article.article.referenceprice %}
+                                    {% endif %}
+                                    
+                                {% endfor %} 
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <table class="table text-center" style="width:100%;">
+                            <thead class="text-ligth">
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prix (€)</th>
+                                    <th>Prix spécial (€)</th>
+                                    <th>Date de vente</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="font-size: 70px;" class="text-center notArticle">Aucun article selectionné</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    {% endif %}
+                </div>
+                <div class="row">
+                    <div class="col-6 d-flex justify-content-start">
+                        <a href="{{path('user_cancel_sale')}}" class="btn action_button mt-5">Annuler la vente</a>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        {% if articles %}
+                            <h2 class="text-dark">TOTAL A PAYER : <strong id="sum_count">{{somme}}</strong><strong> € </strong></h2>
+                            <button type="submit" class="btn action_button mt-5" onclick="return confirm('Voulez-vous valider la vente ?')">Valider la vente</button >
+                            </form>
+                        {% else %}
+                            <button type="button" class="btn action_button mt-5" 
+                            onclick="return confirm('Veuillez d\'abord sélectionner un article à vendre')">Valider la vente</button>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+        {% include "User/article/sold_products.html.twig" %}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
+    <script>
+        $('#modalSoldProduct').on('shown.bs.modal', function(){
+            $('#scanner_input').trigger('focus')
+        });
+        function modify(data){
+            $("#special_price"+ data).hide();
+            $("#input"+ data).show();
+            $("#inputValue"+ data).focus();
+            input_value = document.getElementById("inputValue" + data).value;
+            document.getElementById("special_price"+ data).innerHTML = input_value;
+        };
+        
+        function functionTest(id){
+
+            $("#special_price" + id).show();
+            $("#input"+ id).hide();
+            
+            //input = document.getElementById("special_price");
+            input_value = document.getElementById("inputValue" + id).value;
+            document.getElementById("special_price" + id).innerHTML = input_value;
+            document.getElementById("keepSpecialPrice"+ id).value = input_value;
+            
+
+            var sum = Number(0);
+            {% for article in articles %}
+                test = Number(document.getElementById("special_price" + {{article.article.id}}).innerHTML);
+
+                referenceprice = {{article.article.referenceprice}};
+
+                if(test){
+                    sum = sum + test
+                } else if(input_value == 0 && input_value.length == 1){
+                    sum = sum + 0;
+                }else{
+                    sum = sum + referenceprice
+                }
+                sum = Math.round(sum*100)/100;
+                
+                document.getElementById("sum_count").innerHTML = sum;
+            {% endfor %}
+        };
+
+    </script>
+{% endblock %}

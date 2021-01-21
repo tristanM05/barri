@@ -1,0 +1,49 @@
+{% for article in articles %}
+    <tr>
+        <td colspan="2"><strong>{{article.designation}}</strong></td>
+        <td colspan="2">{{article.referenceprice}}</td>
+        <td colspan="2">
+            {# DISPLAY THE PRODUCTION DATE IN TWIG FORMAT #}
+                {% if article.productiondate != null %}
+                    {{article.productiondate | date('d/m/Y')}}</td>
+                {% else %}
+                    {{article.productiondate}}
+                {% endif %}
+            {# END DISPLAY THE PRODUCTION DATE IN TWIG FORMAT #}
+        </td>
+        {# <td colspan="2">
+            DISPLAY THE LEFT DATE IN TWIG FORMAT
+                {% if article.leftdate != null %}
+                    {{article.leftdate | date('d/m/Y')}}</td>
+                {% else %}
+                    {{article.leftdate}}
+                {% endif %}
+            END DISPLAY THE LEFT DATE IN TWIG FORMAT
+        </td> #}
+        <td colspan="2">
+            {# DISPLAY BY PRODUCT STATUS #}
+                {% if article.productstatus.wording == 'en vente' %}
+                    {{article.productstatus.wording}}
+                {% else %}
+                    {{article.productstatus.wording ~ ' ' ~ article.leftdate | date('d/m/Y')}}
+                {% endif %}
+            {# DISPLAY BY PRODUCT STATUS #}
+        </td>
+        <td colspan="2">
+            {# DISPLAY ACCORDING TO THE VISIBILITY OF THE PRODUCT #}
+                {% if article.isvisible == 1 %}
+                    Oui
+                {% else %}
+                    Non
+                {% endif %}
+            {# END DISPLAY ACCORDING TO THE VISIBILITY OF THE PRODUCT #}
+        </td>
+
+        {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+            <td>
+                <a href="{{path('user_duplicate_article', {'id': article.id})}}" class="btn action_button" {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-clone"></i></a>
+            </td>
+        {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+        
+    </tr>
+{% endfor %}

@@ -1,0 +1,5 @@
+SELECT *
+FROM `name`
+WHERE is_active = 1
+ORDER BY RAND()
+LIMIT 1

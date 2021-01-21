@@ -1,0 +1,31 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" crossorigin="anonymous">
+</script>
+
+<script>
+    $(document).ready(function(){
+
+        (function($){
+                $.fn.datepicker.dates['fr'] = {
+                days: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+                daysShort: ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."],
+                daysMin: ["D", "L", "Ma", "Me", "J", "V", "S"],
+                months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+                monthsShort: ["Janv.", "Févr.", "Mars", "Avril", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."],
+                today: "Aujourd'hui",
+                monthsTitle: "Mois",
+                clear: "Effacer",
+                weekStart: 1,
+                format: "dd/mm/yyyy"
+                };
+                }(jQuery));
+
+
+            
+                $('#soldArticle').datepicker({
+                language: 'fr',
+                startDate: '01/01/2020',
+                endDate: new Date()
+            });
+            
+    });
+</script>

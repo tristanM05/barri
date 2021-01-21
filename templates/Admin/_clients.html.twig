@@ -1,0 +1,26 @@
+{% for client in clients %}
+    <tr>
+        <td>{{client.email}}</td>
+        <td>
+            <a href="{{path('admin_premium_client',{'id':client.id})}}" class=" js-premium">
+                <span class="js-ispremium">
+                    {# CHECK IF THE CLIENT IS PREMIUM #}
+                        {% if client.ispremium %}
+                            <i class="fas fa-check text-success fa-2x"></i>
+                        {% else %}
+                            <i class="fas fa-times text-danger fa-2x"></i>
+                        {% endif %}
+                    {# END CHECK IF THE CLIENT IS PREMIUM #}
+                </span>
+            </a>
+        </td>
+        <td>
+                <a href="{{path('infoClient',{'id':client.id})}}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                <form method="POST" style="display:inline-block" action="{{path('supClient',{'id':client.id})}}" onsubmit="return confirm('Confirmer la suppression)">
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ client.id)}}">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                </form>
+        </td>
+    </tr>
+{% endfor %}

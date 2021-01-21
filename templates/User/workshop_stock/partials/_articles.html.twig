@@ -1,0 +1,56 @@
+{% for article in articles %}
+        <tr onclick="document.location='{{path('user_article_show', {'id': article.id})}}' " class="view_article test">
+            <td colspan="1">
+                <a href="{{path('user_duplicate_article', {'id': article.id})}}" class="btn action_button"><i class="fas fa-clone"></i></a>
+            </td>
+            {% if article.designation | length >= 48 %}
+                    <td colspan="2"><strong>{{article.designation|slice(0,48)}}...</strong></td>
+            {% else %}
+                    <td colspan="2"><strong>{{article.designation}}</strong></td>
+            {% endif %}
+            <td colspan="2"><strong>{{article.number}}</strong></td>
+            <td colspan="2">{{article.referenceprice}} €</td>
+            <td colspan="2">
+                {# DISPLAY THE PRODUCTION DATE IN TWIG FORMAT #}
+            {% if article.productiondate != null %}
+                {{article.productiondate | date('d/m/Y')}}</td>
+            {% else %}
+                {{article.productiondate}}
+            {% endif %}
+            {# END DISPLAY THE PRODUCTION DATE IN TWIG FORMAT #}
+            </td>
+    
+            {# <td colspan="2">
+                DISPLAY THE LEFT DATE IN TWIG FORMAT
+                {% if article.leftdate != null %}
+                    {{article.leftdate | date('d/m/Y')}}</td>
+                {% else %}
+                    {{article.leftdate}}
+                {% endif %}
+                END DISPLAY THE LEFT DATE IN TWIG FORMAT
+                </td> #}
+            <td colspan="2">
+                {# DISPLAY BY PRODUCT STATUS #}
+                    {% if article.productstatus.wording == 'en vente' %}
+                        {{article.productstatus.wording}}
+                    {% else %}
+                        {{article.productstatus.wording ~ ' le ' ~ article.leftdate | date('d/m/Y')}}
+                    {% endif %}
+                {# DISPLAY BY PRODUCT STATUS #}
+            </td>
+
+            {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+            <td>
+                <a href="{{path('user_article_edit', {'id': article.id})}}" class="btn action_button"><i class="fas fa-edit"></i></a>
+                <form action="{{path('user_article_delete', {'id': article.id})}}" method="POST" style="display:inline-block">
+                    <button type="submit" class="btn action_button"
+                        onclick="return confirm('Confirmer la suppresion de l\' article')"
+                        ><i class="fas fa-trash"></i>
+                    </button>
+                    <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ article.id)}}">
+                </form>
+            </td>
+            {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+        </tr>
+    
+{% endfor %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.
+    min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('build/css/app.css')}}">
+    <link rel="shortcut icon" type="image/png" href="{{asset('build/data/favicon.png')}}"/>
+    <title>Connexion à l'administration</title>
+</head>
+<body>
+    <div class="col-md-4 offset-md-4 admin_login pt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <i class="fas fa-lock"></i>
+                    Connexion à l'administration
+                </h4>
+            </div>
+            <div class="card-body">
+            {# CHECK IF ERROR #}
+                {% if error %}
+                    <div class="alert alert-warning">
+                        <p>Les informations fournies ne sont pas correctes</p>
+                    </div>
+                {% endif %}
+            {# CHECK IF ERROR #}
+            {# FORM ADMIN LOGIN #}
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="_username">Email</label>
+                        <input type="text" class="form-control" placeholder="Adresse email" name="_username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="_password">Mot de passe</label>
+                        <input type="password" class="form-control" placeholder="Mot de passe" name="_password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success"><i class="fas fa-lock-open"></i>Se connecter</button>
+                    </div>
+                </form>
+            {# END FORM ADMIN LOGIN #}
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

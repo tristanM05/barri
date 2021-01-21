@@ -1,0 +1,67 @@
+{% extends 'Admin/base_admin.html.twig' %}
+
+{% block title %}Informations Client{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="card mt-5 cardClient">
+                    <div class="card-header p-3">
+                        <h2>Informations du client</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><span>Dernière connexion le:</span> {{client.last_action| date('d/m/Y à h:m')}}</p>
+                        <p><span>Nom:</span> {{client.lastName}}</p>
+                        <p><span>Prénom:</span> {{client.firstName}}</p>
+                        <p><span>Téléphone:</span> {{client.phone}}</p>
+                        <p><span>Email:</span> {{client.email}}</p>
+                        <p><span>Adresse:</span> {{client.adress}}</p>
+                        <p><span>Code postal:</span>: {{client.postcode}}</p>
+                        <p><span>Ville:</span>: {{client.city}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card mt-5">
+                    <div class="card-header p-3">
+                        <h2>Envoyer un message</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="my-4">
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success text-center" style="width:100%">
+                                    {{message}}
+                                </div>
+                            {% endfor %}
+                            {{form_start(form)}}
+                                {{form_row(form.message)}}
+                                <div class="form-group">
+                                    <button type="submit" class="btn action_button btn-block mt-2" id="btnContact">Envoyer</button>
+                                </div>
+                            {{form_end(form)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card cardClient mt-3">
+                    <div class="card-header p-3">
+                        <h2>Information sur l'entreprise</h2>
+                    </div>
+                    <div class="card-body">
+                    {% for c in count %}
+                        <p><span>Nombre d'articles en stock: {{c.countItems}}</span></p>
+                    {% endfor %}
+                    {% for v in value %}
+                        <p><span>Valeur du stock: {{v.val|number_format(2, '.',' ')}} &euro;</span></p>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

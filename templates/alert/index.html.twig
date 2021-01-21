@@ -1,0 +1,38 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Alerte produits{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1 class="text-center title mt-4">Alerte sur la date d'éxpiration de ces produits</h1>
+{% include "Partials/flash_message.html.twig" %}
+    <table class="table text-center mt-5 border" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Entrer en stock</th>
+                <th>Date d'expiration</th>
+                <th>Expire dans</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for a in article %}
+            {% if a.enddate != null %} 
+                <tr onclick="document.location='{{path('user_article_show', {'id': a.id})}}' " class="view_article test">
+                    <td><strong>{{a.designation}}</strong></td>
+                    <td>{{a.number}}</td>
+                    <td>{{a.productiondate | date('d/m/Y')}}</td>
+                    <td>{{a.enddate | date('d/m/Y')}}</td>
+                    <td><strong class="diff1">{{a.interval}} jours</strong></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" class="btn action_button mt-4" data-toggle="modal"   data-target="#modalEmail">
+        Envoyer cette liste par mail 
+    </button>
+    {% include "alert/partials/_modal_email.html.twig" %}
+</div>
+{% endblock %}

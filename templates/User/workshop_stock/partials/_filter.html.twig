@@ -1,0 +1,43 @@
+<div id="filter">
+    {{form_start(form, {attr: {class: 'js-filter-form'}})}}
+
+        <div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
+            <span class="sr-only">Loading...</span>
+        </div>
+        
+        <h4 class="title m-0">Produits Visibles</h4>
+            {{form_row(form.isvisible, {attr: {checked:'checked', 'data': true}})}}
+
+        {# <h4>Un test</h4>
+        <input type="checkbox" checked name="test" class="form-control" value="1"> #}
+
+        <h4 class="title">Statut du produit</h4>
+            {{form_row(form.status)}}
+
+        <h4 class="title">Prix</h4>
+        <div class="row">
+            <div class="col-md-6">
+                {{form_row(form.min)}}
+            </div>
+            <div class="col-md-6">
+                {{form_row(form.max)}}
+                {# {% if app.user.ispremium %}
+                    {{form_row(form.expired)}}
+                {% else %}
+                    {{form_row(form.expired, {attr: {disabled: 'disabled' } } )}}
+                {% endif %} #}
+            </div>
+        </div>
+        <hr class="hrFilter">
+        <div class="search">
+            <div class="">
+                {{form_row(form.q)}}
+            </div>
+            <div class="">
+                {{form_row(form.n)}}
+            </div>
+        </div>
+</div>
+{{form_end(form)}}
+
+    {# <button type="submit" class="btn btn-success" {{ not app.user.ispremium ? "disabled" }}>Valider</button> #}

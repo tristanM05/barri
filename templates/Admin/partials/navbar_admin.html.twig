@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ path('admin_home') }}">Barry - ADMIN</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+        aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{path('user_home')}}">Accèder au site <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        
+        <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item">
+                <a href="{{path('admin_edit_profile', {'id': app.user.id})}}">
+                    <img src="{{asset('build/data/avatar.jpg')}}" alt="client_avatar" class="rounded-circle img-fluid d-block" style="width:50px;">
+                </a>
+            </li>
+            <li class="nav-item text-light mx-2">
+                <p class="m-0 text-ligth">{{app.user.firstname}} {{app.user.lastname}}</p>
+                <span class="badge badge-pill badge-success">Admin</span>
+            </li>
+            <li class="nav-item">
+                <a href="{{path('admin_account_logout')}}" class="btn action_button nav-link">Déconnexion</a>
+            </li>
+        </ul>
+    </div>
+</nav>

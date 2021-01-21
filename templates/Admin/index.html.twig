@@ -1,0 +1,155 @@
+{% extends 'Admin/base_admin.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+
+        {# NUMBER OF REGISTERED CUSTOMERS #}
+            <div class="col-lg-6 py-5">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre d'utilisateurs : </h5>
+                        {# ADAPT THE SENTENCE ACCORDING TO THE NUMBER #}
+                        {% if countusers.0["countUsers"] == 1 %}
+                            <p>Actuellement <strong>{{countusers.0["countUsers"]}}</strong> client est inscrit sur le site
+                            </p>
+                        {% else %}
+                            <p>Actuellement <strong>{{countusers.0["countUsers"]}}</strong> clients sont inscrits sur le site
+                            </p>
+                        {% endif %}
+                        {# END ADAPT THE SENTENCE ACCORDING TO THE NUMBER #}
+                    </div>
+                </div>
+            </div>
+        {# END NUMBER OF REGISTERED CUSTOMERS #}
+
+        {# NUMBER OF REGISTERED ITEMS #}
+            <div class="col-lg-6 py-5">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre d'articles : </h5>
+                        <p>Actuellement <strong>{{countitems.0["countItems"]}}</strong> articles sont enregistrés sur le site</p>
+                        <p>La valeur total des article en stock sur le site ets de <strong>{{countStock.0["SUM"]|number_format(2, '.',' ')}} &euro;</strong></p>
+                    </div>
+                </div>
+            </div>
+        {# END NUMBER OF REGISTERED ITEMS #}
+
+        {# NUMBER OF CONNECTED CLIENTS #}
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre de clients actifs : </h5>
+
+                        {% if countconnectedusers.0[1] == 1 %}
+                            <p>Actuellement <strong>{{countconnectedusers.0[1]}}</strong> client est actif sur le site
+                        </p>
+                        {% else %}
+                            <p>Actuellement <strong>{{countconnectedusers.0[1]}}</strong> clients sont actifs sur le site
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Mode maintenance</h5>
+                        {% for m in button %}
+                            {% if m.status != 1 %}
+                                <form method="POST" style="display:inline-block" action="{{path('maintenance')}}" onsubmit="return confirm ('Confirmer la mise en route de la maintenance')">
+                                <input type="submit" class="btn btn-primary" value="passer en mode maintenance">
+                                </form>
+                            {% else %}
+                                <form method="POST" style="display:inline-block" action="{{path('maintenanceStop')}}" onsubmit="return confirm ('arrêté la maintenance ?')">
+                                <input type="submit" class="btn btn-danger" value="arrêt de la maintenance">
+                                </form>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {# END NUMBER OF CONNECTED CLIENTS #}
+
+        {# ALL USERS #}
+            <div class="col-lg-12 js-filter">
+
+            {# FILTER CLIENTS #}
+                <div class="col-sm-12 col-md-3 pt-5">
+                    {% include "Admin/_filter.html.twig" %}
+                </div>
+            {# END FILTER CLIENTS #}
+
+            {# SORTING CLIENTS #}
+                <div class="d-flex justify-content-end js-filter-sorting">
+                    {% include "Admin/_sorting.html.twig" %}
+                </div>
+            {# END SORTING CLIENTS #}
+                <div class="row">
+                    <div class="col-12">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                        <table class="table text-center" style="width:100%">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Nom</th>
+                                    <th scope="col">Premium</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="js-filter-content">
+                                {% include "Admin/_clients.html.twig" %}
+                            </tbody>
+                        </table>
+
+                        {# PAGINATION #}
+                        <div class="js-filter-pagination padding_pagination">
+                            {% include "Admin/_pagination.html.twig" %}
+                        </div>
+                        {# END PAGINATION #}
+                    </div>
+                </div>
+                
+            </div>
+        {# END ALL USERS #}
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        function onClickPremium(event){
+            event.preventDefault();
+
+            const url = this.href;
+            const icon = this.querySelector('i');
+
+            axios.get(url).then(function(response){
+                
+                if(icon.classList.contains('fa-check')) {
+                    icon.classList.replace('fa-check', 'fa-times');
+                    icon.classList.replace('text-success', 'text-danger');
+                }else {
+                    icon.classList.replace('fa-times', 'fa-check')
+                    icon.classList.replace('text-danger','text-success');
+                }
+            }).catch(function(error){
+                if(error.response.status === 403){
+                    window.alert("Une erreur est survenue , merci de réessayer ultérieurement")
+                }
+            })
+        }
+
+        document.querySelectorAll('a.js-premium').forEach(function(link){
+            link.addEventListener('click', onClickPremium);
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if app.user.ispremium %}
+    {{ knp_pagination_sortable(articles, 'Prix  ', 'p.referenceprice') }}
+    {{ knp_pagination_sortable(articles, 'Nom ', 'p.designation') }}
+{% else %}
+    <button type="button" class="btn btn-secondary ml-2 text-dark" disabled>Prix </button>
+    <button type="button" class="btn btn-secondary ml-2 text-dark" disabled>Nom </button>
+{% endif %}

@@ -1,0 +1,198 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Stock atelier{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css"
+    integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w=="
+    crossorigin="anonymous" />
+{% endblock %}
+
+{% block body %}
+    {# <div id="div_graph"></div> #}
+    <div class="container pb-5 stock">
+        <div class="row js-filter">
+            <div class="col-12 text-center" style="width:100%">
+                <img src="{{ asset('build/data/stockTitle.png') }}" alt="Login_image" class="img-fluid TitleBan">
+                {# <div id="div_value_graph"></div> #}
+                {# <div id="div_quantity_graph" class="text-center justify-content-center"></div> #}
+            </div>
+            {# FILTER ARTICLES #}
+                <div class="col-sm-12 col-md-3">
+                    {% include "User/workshop_stock/partials/_filter.html.twig" %}
+                </div>
+            {# END FILTER ARTICLES #}
+            
+            {% include "User/workshop_stock/partials/_data_workshop_stock.html.twig" %}
+
+            <div class="row border" style="width:100%">
+                
+                <div class="col-12" style="width:100%">
+                    {# DISPLAYS THE FLASH MESSAGES #}
+                        {% include "Partials/flash_message.html.twig" %}
+                    {# END DISPLAYS THE FLASH MESSAGES #}
+
+                    
+                    {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                    <div class="d-inline-flex" style="width:72%">
+                        <a href="{{path('user_article_add')}}" class="btn action_button my-2"><i class="fas fa-plus"></i></a>
+                        {% if expired %}
+                            <a href="{{path('expiredDate')}}" class="btn btn-danger my-2 ml-3">Articles expirés</a>
+                        {% else %}
+                        {% endif %}
+                    </div>
+                        
+                    {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+
+                    {# SORTING ARTICLES #}
+                        <div class="d-inline-flex justify-content-end js-filter-sorting" style="width:25%">
+                            {% include "User/workshop_stock/partials/_sorting.html.twig" %}
+                        </div>
+                    {# END SORTING ARTICLES #}
+                    
+
+                    
+                    
+                    <table class="table text-center" style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col-1" colspan="1">Dupliquer</th>
+                                <th scope="col-2" colspan="2">Nom</th>
+                                <th scope="col-2" colspan="2">Code</th>
+                                <th scope="col-2" colspan="2">Prix</th>
+                                <th scope="col-2" colspan="2">Entrer en stock</th>
+                                {# <th scope="col-2" colspan="2">Date de sortie</th> #}
+                                <th scope="col-2" colspan="2">Statut</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="js-filter-content">
+                            {% include "User/workshop_stock/partials/_articles.html.twig" %}
+                        </tbody>
+                    </table>
+
+                    {# PAGINATION #}
+                        <div class="js-filter-pagination pagination">
+                            {% include "User/workshop_stock/partials/_pagination.html.twig" %}
+                        </div>
+                    {# END PAGINATION #}
+                
+                </div>
+
+            </div>
+
+            <div class="col-12 pt-5 justify-content-end d-flex">
+                
+                    {# CHECK IF CLIENT HAVE ARTICLE(S) #}
+                        {% if articles.items == [] %}
+                            <button type="button" class="btn action_button" onclick="return confirm('Vous n\'avez pas d\'article à exporter')">Export tableur</button>
+                        {% else %}
+                            <a href="{{ path('user_export_articles_in_CSV') }}" class="btn action_button">Export tableur</a>
+                        {% endif %}
+                    {# END CHECK IF CLIENT HAVE ARTICLE(S) #}
+                    <button type="button" class="btn action_button mx-4" data-toggle="modal"   data-target="#modalEmail">
+                        Envoyer mes articles par mail 
+                    </button>
+                    {# <a href="{{ path('user_print_datas') }}" class="btn action_button" target="_blank">Imprimer / télécharger la liste de mes articles</a> #}
+
+                
+            </div>
+        </div>
+
+        {% include "User/workshop_stock/partials/_modal_send_datas_by_email.html.twig" %}
+        {% include "User/workshop_stock/partials/_modal_graph_count_stock.html.twig" %}
+        {% include "User/workshop_stock/partials/_modal_graph_quantity_stock.html.twig" %}
+                
+
+
+    
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+    integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    crossorigin="anonymous"></script>
+        <script>
+
+        Chart.defaults.global.title.display = true;
+        Chart.defaults.global.title.text = "title";
+        Chart.defaults.global.elements.point.radius = 4;
+        Chart.defaults.global.title.fontSize = 20;
+        Chart.defaults.global.legend.display = false;
+
+        let article = document.querySelector("#article")
+        let articleGraph = new Chart(article,{
+            type: "line",
+            data: {
+                labels: {{ date|raw }},
+                datasets: [{
+                    label: "",
+                    data : {{ quantity|raw }},
+                    borderColor: 'rgba(150, 190, 19)',
+                    backgroundColor: 'rgba(150, 190, 19, 0.2)',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Nombre d'articles"
+                        },
+                        ticks: {
+                            beginAtZero :true
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Jours"
+                        }
+                    }]
+                },
+                title: {
+                    text: "Nombre d'articles en stock par jour"
+                },
+            }
+        })
+
+        let stock = document.querySelector("#stock")
+        let stockGraph = new Chart(stock,{
+            type: "bar",
+            data: {
+                labels: {{ date|raw }},
+                datasets: [{
+                    label: "",
+                    data : {{ value|raw }},
+                    backgroundColor: 'rgba(17, 61, 62, 0.6)',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Valeur en euro'
+                        },
+                        ticks: {
+                            beginAtZero :true
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Jours"
+                        }
+                    }]
+                },
+                title: {
+                    text: 'Valeur du stock par jour'
+                }
+            }
+        })
+    </script>
+    <script>
+        
+    </script>
+{% endblock %}

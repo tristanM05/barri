@@ -1,0 +1,35 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}Ma boutique{% endblock %}
+
+{% block body %}
+{% if edit %}
+    {% set pathx = 'editShop' %}
+{% else %}
+    {% set pathx = 'addShop' %}
+{% endif %}
+<div class="container">
+    <div class="text-center titlesold">
+        <img src="{{ asset('build/data/soldtitle.png') }}" alt="Login_image" class="img-fluid TitleBan2">
+    </div>
+    <div class="card cardShop">
+        <div class="card-header">
+            <h5 class="title">Informations de ma boutique</h5>
+        </div>
+        <div class="card-body p-4">
+            {{form_start(form_shop)}}
+                {{form_row(form_shop.name)}}
+                {{form_row(form_shop.adress)}}
+                {{form_row(form_shop.description)}}
+                {{form_row(form_shop.image)}}
+        </div>
+        <div class="card-footer text-center">
+            <button type="submit" class="btn action_button" {{ not app.user.ispremium ? "disabled" }}style="width:45%">
+                Enregistrer
+            </button>
+            {{form_end(form_shop)}}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

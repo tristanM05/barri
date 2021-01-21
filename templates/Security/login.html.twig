@@ -1,0 +1,148 @@
+    {% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur Barri.fr{% endblock %}
+
+{% block body %}
+        {% if button.status != 1 %}
+            <div class="d-flex">
+                <div class="ml-auto mt-4 mr-4 btnLog">
+                    <button type="button" class="btn action_button_log mr-3 mb-0" data-toggle="modal" data-target="#modalRegister">J'ouvre un compte gratuit</button>
+                    <button type="button" class="btn action_button_log mb-0" data-toggle="modal" data-target="#modalLogin">Je me connecte</button>
+                </div>
+            </div>
+        {% else %}
+            <div id="maintenance">
+                <p>Barri est en maintenance</p>
+            </div>
+        {% endif %}
+    <div class="container">
+        <div class="row">
+                <div class="col-12 text-center logimg">
+                    {% include "Partials/flash_message.html.twig" %}
+                    {# CHECK IF ERROR #}
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                <p>Le couple identifiant/mot de passe est incorrect</p>
+                            </div>
+                        {% endif %}
+                    {# END CHECK IF ERROR #}
+                    <img src="{{ asset('build/data/barriLog.png') }}" alt="Login_image" class="img-fluid barriLog" style="width: 50%;" >
+                </div>
+            <div class="col-12 login titleLog">
+                <h1><span>Qui est</span> barri&reg ?</h1>
+                <div class="textLog">
+                    <p id="p1">
+                        <span>barri&reg</span> est un Assistant Digital de Gestion spécialement conçu pour simplifier la gestion des stocks et des entreprises.
+                    </p>
+                    <p id="p2">
+                        Inventé et développé par nos experts en gestion et informatique, cet assistant révolutionne le suivi des articles, produits ou créations.
+                    </p>
+                </div>
+                <div class="textLog2">
+                    <p>
+                        <span>barri&reg</span> est un Assistant Digital de Gestion spécialement conçu
+                        pour simplifier la gestion des stocks et des entreprises. <br><br>
+                        Inventé et développé par nos experts en gestion et informatique, cet assistant
+                        révolutionne le suivi des articles, produits ou créations.
+                    </p>
+                </div>
+            </div>
+            <div id="video">
+                <a href="https://www.youtube.com/watch?v=WT22ULaTwVI&feature=youtu.be" target="blank"><img src="{{ asset('build/data/VIDEO.png') }}" alt="Login_image" class="img-fluid imgVideo"></a>
+            </div>
+            <div class="d-flex">
+                <div class="py-4 px-4" id="infoLog">
+                    <p id="titleLog"><span>comment fonctionne </span>barri&reg ?</p>
+                    <hr id="hrPhone">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <img src="{{ asset('build/data/log1.png') }}" alt="Login_image" class="img-fluid log1" style="width: 80%">
+                            <p class="plog">
+                                <span class="lognum py-1 px-2">1</span> Je créé mon compte et choisis ma formule
+                            </p>
+                            <p class="logtxt">
+                                <span>Créez gratuitement</span> votre compte avec une simple adresse mail. <br>Découvrez BARRI&reg et choisissez <br>votre formule.
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <img src="{{ asset('build/data/log2.png') }}" alt="Login_image" class="img-fluid log2" style="width: 60%">
+                            <p class="plog">
+                                <span class="lognum py-1 px-2">2</span> Je reçois mes étiquettes et ma <br> douchette
+                            </p>
+                            <p class="logtxt">
+                                Avec <span>les étiquettes et ma douchette</span> fournies, identifiez vos article et enregistrez simplement, dans <span class="text-uppercase">barri&reg</span>, vos références produits
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            <img src="{{ asset('build/data/log3.png') }}" alt="Login_image" class="img-fluid log3" style="width: 60%">
+                            <p class="plog">
+                                <span class="lognum py-1 px-2">3</span> <span class="text-uppercase">barri&reg</span> m'informe de la situation
+                            </p>
+                            <p class="logtxt">
+                                Depuis une connexion internet, accedez à la <span>situation de vos articles</span>. Offrez-vous du temps pour développer votre entreprise !
+                            </p>
+                            <div id="txtPhone">
+                                <p>
+                                    Pour bénéficier d'une expérience de navigation optimal, rendez-vous sur <span>barri.fr</span> depuis votre ordinateur. Service commercial: sdurin@idtpe.com <br> 07 66 58 02 67
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include "Security/Partials/_register.html.twig" %}
+        {% include "Security/Partials/_login.html.twig" %}
+        
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    const eye = document.querySelector('.fa-eye');
+    const eyeOff = document.querySelector('.fa-eye-slash');
+    const passwordField = document.querySelector('input[type=password]');
+
+    eye.addEventListener('click', () => {
+        eye.style.display = "none";
+        eyeOff.style.display = "block";
+        passwordField.type = "text";
+    })
+    eyeOff.addEventListener('click', () => {
+        eyeOff.style.display = 'none';
+        eye.style.display = "block";
+        passwordField.type = "password";
+    })
+
+    const eye2 = document.querySelector('.eye');
+    const eyeOff2 = document.querySelector('.eyeoff');
+    const passwordField2 = document.querySelector('#registration_passwordVerification');
+
+    eye2.addEventListener('click', () => {
+        eye2.style.display = "none";
+        eyeOff2.style.display = "block";
+        passwordField2.type = "text";
+    })
+    eyeOff2.addEventListener('click', () => {
+        eyeOff2.style.display = 'none';
+        eye2.style.display = "block";
+        passwordField2.type = "password";
+    })
+
+    const eye3 = document.querySelector('.eye2');
+    const eyeOff3 = document.querySelector('.eyeoff2');
+    const passwordField3 = document.querySelector('.passLog');
+
+    eye3.addEventListener('click', () => {
+        eye3.style.display = "none";
+        eyeOff3.style.display = "block";
+        passwordField3.type = "text";
+    })
+    eyeOff3.addEventListener('click', () => {
+        eyeOff3.style.display = 'none';
+        eye3.style.display = "block";
+        passwordField3.type = "password";
+    })
+</script>
+{% endblock %}

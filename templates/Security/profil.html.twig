@@ -1,0 +1,46 @@
+{% if app.user.roles[0] == "ROLE_ADMIN" %}
+        {% set var = 'Admin/base_admin.html.twig' %}
+    {% else %}
+        {% set var = 'User/base_user.html.twig' %}
+    {% endif %}
+{% extends var%}
+
+
+{% block title %}Edition du profil{% endblock %}
+
+{% block body %}
+    <div class="container pb-5">
+    {# DISPLAYS THE FLASH MESSAGES #}
+        {% include "Partials/flash_message.html.twig" %}
+    {# END DISPLAYS THE FLASH MESSAGES #}
+        <div class="row editProfile">
+            <div class="card col-6 p-0 ">
+                <div class="card-header">
+                    <p class="title">Edition de votre profil</p>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        {{form_start(form)}}
+                            {{form_widget(form)}}
+                            <button type="submit" class="btn action_button">Enregistrer les modifications</button>
+                        {{form_end(form)}}
+                    </div>
+                </div>
+            </div>
+            <div class="card col-6 p-0">
+                <div class="card-header">
+                    <p class="title">Réinitialiser votre mots de passe</p>
+                </div>
+                <div class="card-body">
+                    <div>
+                        {{form_start(formPassword)}}
+                            {{form_widget(formPassword)}}
+                            <button type="submit" class="btn action_button">Modifier le mot de passe</button>
+                        {{form_end(formPassword)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

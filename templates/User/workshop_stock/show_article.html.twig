@@ -1,0 +1,107 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}article: {{article.designation}}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 p-0">
+
+            {# CHECK IF IT IS THE CUSTOMER'S ITEM #}
+                {% if app.user == article.client %}
+                    <div class="justify-content-center pb-4 mt-5">
+                        <a href="{{path('user_workshop_stock')}}" class="btn action_button mr-3"><i class="fas fa-arrow-left"></i> Retour aux articles</a>
+                        <a href="{{path('user_article_edit', {'id': article.id})}}" class="btn action_button"><i class="fas fa-edit"></i> Modifier</a>
+                    </div>
+                    <h1 class="title mb-4">Affichage de l'article :<span class="text-uppercase"> {{article.designation}}</span></h1>
+                    {% include "Partials/flash_message.html.twig" %}
+
+                
+                    <div class="row pb-5">
+                        <div class="col-6 border showArticle">
+                            <div class="form-group">
+                                <label><strong>Numéro d'identification :</strong></label>
+                                <p>{{article.number}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Designation :</strong></label>
+                                <p>{{article.designation}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Description :</strong></label>
+                                <p>{{article.describing}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-6 border showArticle">
+                            <div class="form-group">
+                                <label><strong>Prix de vente de référence :</strong></label>
+                                <p>{{article.referenceprice}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Prix spécial :</strong></label>
+                                <p>{{article.specialprice}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Coût de revient ou prix d'achat :</strong></label>
+                                <p>{{article.costprice}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-6 border showArticle">
+                            <div class="form-group">
+                                <label><strong>Date de production :</strong></label>
+                                <p>{{article.productiondate | frenchdate}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Date de sortie :</strong></label>
+                                <p>
+                                    {% if article.leftdate %}
+                                        {# {{article.leftdate | date('j F Y')}} #}
+                                        {{article.leftdate | frenchdate}}
+                                    {% else %}
+                                        <p>Article encore en vente</p>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-6 border showArticle">
+                            <div class="form-group">
+                                <label><strong>Point de vente :</strong></label>
+                                <p>{{article.salepoint.wording}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Catégories d'articles :</strong></label>
+                                <p>{{article.subfamily.wording}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Statut du produit :</strong></label>
+                                <p>{{article.productstatus.wording}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Visible ? :</strong></label>
+                                {% if article.isvisible %}
+                                    <p>Oui</p>
+                                {% else %}
+                                    <p>Non</p> 
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% else %}
+                    <p class="alert alert-danger">Cette page n'est pas disponible</p>
+                    <a href="{{path('user_articles')}}">Revenir sur mes articles</a>
+                {% endif %}
+            {# END CHECK IF IT IS THE CUSTOMER'S ITEM #}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

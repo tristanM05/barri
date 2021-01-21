@@ -1,0 +1,31 @@
+<div class="col-6 pb-3">
+    <div class="justify-content-end d-flex mr-10 pl-2">
+        <h2 class="border border-dark px-2" style="width:33%">
+            {{form_start(form)}}
+            {{form_widget(form.maxsupertop)}} mois
+            
+            {# <input type="text" class="form-control d-inline h2" style="width:30%" value="{{superTopConfig}}" name="superTopConfig"> mois #}
+        </h2>
+    </div>
+</div>
+
+<div class="col-2 pb-3">
+    <div class="ml-3 justify-content-start text-center">
+        <h2  class="border border-dark px-2">
+            {{form_widget(form.maxtop)}}
+                mois
+            {# <input type="text" class="form-control d-inline h2" style="width:40%" value="{{topConfig}}" name="topConfig"> mois #}
+        </h2>
+    </div>
+</div>
+<div class="col-4 justify-content-center d-flex">
+    <div>
+        {% if app.user.ispremium %}
+           <button type="submit" class="btn action_button mt-2">Valider</button> 
+        {% else %}
+            <button type="button" class="btn action_button mt-2" disabled>Valider</button>
+        {% endif %}
+    </div>
+    {{form_end(form)}}
+    
+</div>

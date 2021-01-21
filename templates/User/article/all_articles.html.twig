@@ -1,0 +1,101 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}Gestion des articles{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+        <div class="row js-filter">
+
+            {# FILTER ARTICLES #}
+                <div class="col-sm-12 col-md-3 pt-5">
+                    {% include "User/article/_filter.html.twig" %}
+                </div>
+            {# END FILTER ARTICLES #}
+
+            <div class="col-sm-12 col-md-9">
+                <h1>Gestion de mes articles</h1>
+                {# DISPLAYS THE FLASH MESSAGES #}
+                    {% include "Partials/flash_message.html.twig" %}
+                {# END DISPLAYS THE FLASH MESSAGES #}
+
+                
+                {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                    <div class="d-inline-flex" style="width:72%">
+                        <button type="button" class="btn action_button my-2 " data-toggle="modal" data-target="#add_article" {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-plus"></i></button>
+                    </div>
+                {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+
+                {# SORTING ARTICLES #}
+                    <div class="d-inline-flex justify-content-end js-filter-sorting" style="width:25%">
+                        {% include "User/article/_sorting.html.twig" %}
+                    </div>
+                {# END SORTING ARTICLES #}
+                
+
+                
+                
+                <table class="table text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col-2" colspan="2">Nom</th>
+                            <th scope="col-2" colspan="2">Prix de référence</th>
+                            <th scope="col-2" colspan="2">Date de production</th>
+                            {# <th scope="col-2" colspan="2">Date de sortie</th> #}
+                            <th scope="col-2" colspan="2">Status</th>
+                            <th scope="col-2" colspan="2">Visible</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="js-filter-content">
+                        {% include "User/article/_articles.html.twig" %}
+                    </tbody>
+                </table>
+
+                {# PAGINATION #}
+                    <div class="js-filter-pagination">
+                        {% include "User/article/_pagination.html.twig" %}
+                    </div>
+                {# END PAGINATION #}
+                
+            </div>
+        </div>
+
+        {# MODAL SOLD PRODUCT #}
+            {% include "User/partials/sold_products.html.twig" %}
+        {# END MODAL SOLD PRODUCT #}
+
+        {# MODAL ADD AN ARTICLE FROM ANOTHER OR STARTING FROM 0  #}
+            <div class="modal fade" id="add_article" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un article</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="{{path('user_article_add')}}" class="btn action_button" {{ not app.user.ispremium ? "disabled" }}>En partant de zéro</a>
+                                </div>
+                                <div class="col-6"><a href="{{path('user_duplicate_all_articles')}}" class="btn action_button" {{ not app.user.ispremium ? "disabled" }}>A partir d'un article existant</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {# MODAL ADD AN ARTICLE FROM ANOTHER OR STARTING FROM 0  #}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
+{% endblock %}

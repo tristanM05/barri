@@ -1,0 +1,75 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}Points de vente{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8 offset-lg-2">
+                <h1>Voici mes Points de vente</h1>
+
+                {# DISPLAYS THE FLASH MESSAGES #}
+                    {% include "Partials/flash_message.html.twig" %}
+                {# END DISPLAYS THE FLASH MESSAGES #}
+
+                {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                {% if app.user.ispremium %}
+                    <a href="{{path('user_salepoint_add')}}" class="btn action_button my-2" {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-plus"></i></a>
+                {% else %}
+                    <button type="button" class="btn action_button my-2" disabled> <i class="fas fa-plus"></i></button>
+                {% endif %}
+                {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                
+                <table class="table text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col-2" colspan="2">Nom</th>
+                            <th scope="col" colspan="2">Actif ?</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for salepoint in salepoints %}
+                            <tr>
+                                <td colspan="2">{{salepoint.wording}}</td>
+                                <td colspan="2">{{salepoint.visible ? 'Oui' : 'Non'}}</td>
+                                {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                                    <td>
+                                        {% if app.user.ispremium %}
+                                            <a href="{{path('user_salepoint_edit', {'id': salepoint.id})}}" class="btn action_button"><i class="fas fa-edit" ></i></a>
+                                        {% else %}
+                                            <button class="btn action_button disabled"><i class="fas fa-edit"></i></button>
+                                        {% endif %}
+                                        
+                                        
+                                        <form action="{{path('user_salepoint_delete', {'id': salepoint.id})}}" method="POST" style="display:inline-block">
+                                            <button 
+                                                type="submit" 
+                                                class="btn action_button" 
+                                                onclick="return confirm('En supprimant ce point de vente, vous allez y supprimer tous les articles qui y sont associés. Confirmer la suppression ?')"
+                                                {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-trash"></i></button>
+                                            <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ salepoint.id)}}" > 
+                                        </form>
+                                    </td>
+                                {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                                
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% include "User/partials/sold_products.html.twig" %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
+{% endblock %}

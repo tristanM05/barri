@@ -1,0 +1,84 @@
+{% extends "User/base_user_home.html.twig" %}
+
+{% block title %}Acceuil{% endblock %}
+
+{% block body %}
+    <div class="container py-5 ">
+        <div class="row p-0 text-center {% if app.user.ispremium %}index_client{% endif %}">
+
+            <div class="">
+
+                {# {% if not app.user.ispremium %}
+                    <div class="alert-no-premium mb-5 not_premium">
+                        <h2 class="py-2 text-light">Votre compte est en lecture seule, <a href="{{ path('user_subscription') }}" class="link-alert-no-premium">cliquez-ici</a> pour le modifier</h2>
+                    </div>
+                {% endif %} #}
+
+                <div class="">
+                    <div class="divHome2" onMouseOver="displayDivInfo('Permet de gérer vos articles');" onMouseOut="displayDivInfo()">
+                        <a href="{{ path('user_workshop_stock') }}">
+                            <img src="{{asset('build/data/stocks.png')}}" class="img-fluid itemhome" alt="">
+                        </a>
+                    </div>
+
+                    <div class="margin_div_top divHome3 " onMouseOver="displayDivInfo('Permet d\'enregistrer les ventes réaliser à l\'atelier');" onMouseOut="displayDivInfo()">
+                        <a href="{{ path('user_workshop_sale') }}">
+                            <img src="{{asset('build/data/vente.png')}}" class="img-fluid itemhome" alt="">
+                        </a>
+                    </div>
+
+                    <div class="divHome" onMouseOver="displayDivInfo('Permet de visualiser votre activité');" onMouseOut="displayDivInfo()">
+                        <a href="{{path('user_management')}}">
+                            <img src="{{asset('build/data/gest.png')}}" class="img-fluid itemhome" alt="">
+                        </a>
+                    </div>
+                    <div class="divHome4" onMouseOver="displayDivInfo('Vous trouverez ici les différents contacts');" onMouseOut="displayDivInfo()">
+                        {# <a href="{{ path('user_outside_sale') }}"> #}<a href="{{ path('assistance') }}">
+                            <img src="{{asset('build/data/assist.png')}}" class="img-fluid itemhome" alt="">
+                        </a>
+                    </div>
+
+                    <div class="divHome5" onMouseOver="displayDivInfo('Le barri\'shop est ouvert !');" onMouseOut="displayDivInfo()">
+                        <a href="{{ path('user_outside_sale') }}">
+                            <img src="{{asset('build/data/shop.png')}}" class="img-fluid itemhome" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+                <img src="{{asset('build/data/circle1.png')}}" id="circle" class="img-fluid" alt="logo barri navbar" style="width:45%">
+                {# <img src="{{asset('build/data/logo1st.png')}}" class="img-fluid" alt="logo barri navbar" style="width:25%"> #}
+
+
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    <script language="javascript">
+        function displayDivInfo(text){
+            if(text){
+                //Détection du navigateur
+                is_ie = (navigator.userAgent.toLowerCase().indexOf("msie") != -1) && (navigator.userAgent.toLowerCase().indexOf("opera") == -1);
+                
+                //Création d'une div provisoire
+                var divInfo = document.createElement('div');
+                divInfo.style.position = 'absolute';
+                document.onmousemove = function(e){
+                    x = (!is_ie ? e.pageX-window.pageXOffset : event.x+document.body.scrollLeft);
+                    y = (!is_ie ? e.pageY-window.pageYOffset : event.y+document.body.scrollTop);
+                    divInfo.style.left = x+15+'px';
+                    divInfo.style.top = y+15+'px';
+                }
+                divInfo.id = 'divInfo';
+                divInfo.innerHTML = text;
+                document.body.appendChild(divInfo);
+            }
+            else{
+                document.onmousemove = '';
+                document.body.removeChild(document.getElementById('divInfo'));
+            }
+        }
+</script>
+{% endblock %}

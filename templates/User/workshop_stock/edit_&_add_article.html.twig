@@ -1,0 +1,275 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}
+{% if isDuplicate %}
+Duplication d'un article :
+{% elseif isEdit %}
+Edition d'un article :
+{% else %}
+Ajout d'un article :
+{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+
+<div class="container pb-5">
+
+    <div class="text-center">
+        <img class="titles" src="{{asset('build/data/articleTitle.png')}}" alt="">
+    </div>
+
+    <div class="row">
+
+        {# DISPLAYS THE FLASH MESSAGES #}
+        {% include "Partials/flash_message.html.twig" %}
+        {# END DISPLAYS THE FLASH MESSAGES #}
+
+
+        {# CHECK IF IT IS INDEED THE CUSTOMER'S ITEM OR IF THE ROUTE ALLOWS TO ADD #}
+        {% if app.user == article.client or app.request.pathInfo == '/user/article/add'%}
+
+        {# ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+        {% if isDuplicate %}
+            <h1 style="width:100%;" class="title mb-4">Duplication de l'article : <strong>{{article.designation}}</strong></h1>
+            <br>
+        {% elseif isEdit %}
+            <h1 style="width:100%;" class="title mb-4">Edition de l'article : <strong>{{article.designation}}</strong></h1><br>
+
+        {% else %}
+            <h1 style="width:100%;" class="title mb-4">Ajout d'un article :</h1><br>
+        {% endif %}
+        {# END ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                {{form_start(form_article)}}
+
+                <div class="card mb-3" style="width: 33rem;">
+                    <div class="card-body">
+                        <h5 class="card-title title">Identification:</h5>
+
+
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="number">Numéro d'identification</label>
+                            <input type="text" class="form-control mb-4" value="{{article.number}}" name="number" disabled>
+                        {% elseif isDuplicate %}
+                            {{form_row(form_article.number,{'id':'scanner_input', attr:{value : ''}})}}
+                        {% else %}
+                            {{form_row(form_article.number,{'id':'scanner_input'})}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                        {# SPAN FOR BARCODE ON SMALL DEVICE #}
+                        {# <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" data-toggle="modal" data-backdrop="false"
+                                                data-target="#livestream_scanner">
+                                                <i class="fa fa-barcode"></i>
+                                            </button>
+                                        </span> #}
+                        {# END SPAN FOR BARCODE ON SMALL DEVICE #}
+
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="designation">Designation</label>
+                            <input type="text" class="form-control mb-4" value="{{article.designation}}" disabled
+                            name="designation">
+                        {% else %}
+                            {{form_row(form_article.designation,{'id':'testFocus'})}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="describing">Description</label>
+                            <textarea name="describing" cols="30" rows="4" class="form-control" disabled>{{article.describing}}</textarea>
+                        {% else %}
+                            {{form_row(form_article.describing)}}
+                            {{form_row(form_article.images)}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                            <h5 class="card-title title mt-4">Date de mise en stock:</h5>
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="productiondate">Date de production *</label>
+                            <input type="date" class="form-control mb-4" value="{{article.productiondate | date('Y-m-d')}}"
+                            disabled name="productiondate">
+                        {% elseif isEdit %}
+                            {{form_row(form_article.productiondate)}}
+                        {% else %}
+                            {{form_row(form_article.productiondate, {attr:{value : date}})}}
+                        {% endif %}
+
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        <h5 class="card-title title mt-4">Date d'expiration: <span id="optionDate">(optionel)</span></h5>
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <input type="date" class="form-control mb-4" value="{{article.endDate | date('Y-m-d')}}"
+                            disabled name="endDate">
+                        {% else %}
+                            {{form_row(form_article.endDate)}}
+                            <p id="endDate" class="m-0 btn btn-block action_button">Définissez une alerte pour cette date</p>
+                            <div id="dateLimit">;  
+                                <div class="d-flex">
+                                    <h5 class="title">Date à laquelles vous souhaitez être alerté:</h5>
+                                    <p id="closeDate" class="btn action_button ml-2">X</p>
+                                </div>
+                                {{form_row(form_article.dateLimit)}}
+                            </div>
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                    </div>
+                </div>
+
+                {% if isEdit %}
+                    <div class="card my-4">
+                        <h5 class="title card-header">Image(s) liées à cet article:</h5>
+                        <div class="p-3 row">
+                            {% for image in article.images %}
+                                <div class="col-6 mb-3">
+                                    <img class="imgPrev" src="{{ asset('uploads/' ~ image.name)}}" alt="image-{{image.id}}"
+                                        width="140" height="170">
+                                    <a class="delImg" href="{{ path('article_delete_image', {id: image.id}) }}" data-delete
+                                        data-token="{{ csrf_token('delete' ~ image.id) }}"><i class="fas fa-trash"></i></a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %}
+
+            </div>
+
+            <div class="col-lg-6 pl-5">
+                <div class="card" style="width: 33rem;">
+                    <div class="card-body">
+                        <h5 class="card-title title">Prix:</h5>
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="costprice">Coût de revient ou prix d'achat</label>
+                            <input type="text" class="form-control mb-4" value="{{article.costprice}}" disabled
+                            name="costprice">
+                        {% else %}
+                            {{form_row(form_article.costprice)}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="referenceprice">Prix de vente de référence (€)</label>
+                            <input type="text" class="form-control mb-4" value="{{article.referenceprice}}" disabled
+                            name="referenceprice">
+                        {% else %}
+                            {{form_row(form_article.referenceprice)}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        {% if article.productstatus != 'en vente' %}
+                            <label for="specialprice">Prix spécial (€)</label>
+                            <input type="text" class="form-control mb-4" value="{{article.specialprice}}" disabled
+                            name="specialprice">
+                        {% else %}
+                            {{form_row(form_article.specialprice)}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                        <hr class="mt-4">
+
+                        <h5 class="card-title title">Stockage:</h5>
+                        {{form_row(form_article.productStatus)}}
+                        {% if article.isvisible %}
+                            {% set check = true %}
+                        {% else %}
+                            {% set check = false %}
+                        {% endif %}
+                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        <h5 class="card-title title">Date de vente:</h5>
+                        {{form_row(form_article.leftdate)}}
+                        {% if article.productstatus != 'en vente' %}
+                            <input type="checkbox" checked="{{article.isvisible}}" disabled name="isvisible">
+                            <label for="specialprice">Produit visible</label>
+                        {% else %}
+                            {{form_row(form_article.isvisible, {attr: {checked: 'checked'}})}}
+                        {% endif %}
+                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+
+                    </div>
+                </div>
+
+                <div class="pt-3">
+                    <p>* Champs obligatoires</p>
+                    {% if not isDuplicate and isEdit %}
+                    {# {{ not app.user.ispremium ? "disabled" }} #}
+                        <button type="submit" class="btn action_button"
+                        style="width:45%">Enregistrer les modifications</button>
+                    {% else %}
+                        <button type="submit" class="btn action_button" 
+                        style="width:45%">Ajouter</button>
+                    {% endif %}
+
+
+                    <a href="{{path('user_workshop_stock')}}" class="btn action_button" style="width:45%">Annuler</a>
+                </div>
+
+                {% if article.productstatus != 'en vente' %}
+                    <div style="display:none;">
+                        {{form_widget(form_article)}}
+                    </div>
+                {% endif %}
+
+                {{form_end(form_article)}}
+            </div>
+        </div>
+        {% else %}
+            <p class="alert alert-danger">Cette page n'est pas disponible</p>
+            <a href="{{path('user_articles')}}">Revenir sur mes articles</a>
+        {% endif %}
+        {# CHECK IF IT IS INDEED THE CUSTOMER'S ITEM OR IF THE ROUTE ALLOWS TO ADD #}
+    </div>
+
+
+    {# SOLD A PRODUCT #}
+    {% include "User/partials/scanner_modal.html.twig" %}
+    {# END SOLD A PRODUCT #}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{# {% include "User/partials/products_datepicker.html.twig" %} #}
+<script>
+    $(document).ready(function () {
+        document.getElementById("scanner_input").focus();
+    })
+</script>
+<script src="{{ asset('build/js/images.js')}}"></script>
+<script>
+    const endDate = document.querySelector('#endDate');
+    const dateLimit = document.querySelector('#dateLimit');
+    const closeDate = document.querySelector('#closeDate');
+
+    endDate.addEventListener('click', () => {
+        endDate.style.display = "none";
+        dateLimit.style.display = "block";
+    })
+    closeDate.addEventListener('click', () => {
+        endDate.style.display = "block";
+        dateLimit.style.display = "none";
+    })
+</script>
+<script>
+    $('.custom-file-input').on('change', function(event) {
+        var inputFile = event.currentTarget;
+        $(inputFile).parent()
+        .find('.custom-file-label')
+        .html(inputFile.files[0].name);
+    });
+</script>
+{% endblock %}

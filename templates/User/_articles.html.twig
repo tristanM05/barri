@@ -1,0 +1,56 @@
+{% for article in articles %}
+<tr>
+    <td colspan="2"><strong>{{article.designation}}</strong></td>
+    <td colspan="2">{{article.subfamily.wording}}</td>
+    <td colspan="2">{{article.referenceprice}}</td>
+    <td colspan="2">
+        {% if article.productiondate != null %}
+        {{article.productiondate | date('d/m/Y')}}</td>
+    {% else %}
+    {{article.productiondate}}
+    {% endif %}
+    </td>
+    <td colspan="2">
+        {% if article.leftdate != null %}
+        {{article.leftdate | date('d/m/Y')}}</td>
+    {% else %}
+    {{article.leftdate}}
+    {% endif %}
+    </td>
+    <td colspan="2">{{article.salepoint.wording}}</td>
+
+    <td colspan="2">
+        {% set difference = date(article.leftdate).diff(date(article.productiondate)) %}
+        {% set difference2 = date("now").diff(date(article.productiondate)) %}
+        {% set leftDays = difference.days - 1 %}
+        {% set leftDays2 = difference2.days - 1 %}
+
+        {% if article.leftdate %}
+            {{ leftDays + 1}}
+        {% else %}
+            {{leftDays2}}
+            {# {{"now"|date("d-m") - article.productiondate|date("d-m")}} #}
+        {% endif %}
+        jours
+    </td>
+
+    <td>
+        {# CHECK IF LEFTDATE #}
+            {% if article.leftdate %}
+            {# IF BETWEEN LEFTDATE & PRODUCTIONDATE < 60 DAYS #}
+                {% if leftDays < 60 %}
+                    <span class="badge badge-pill badge-success">Success</span>
+                {% endif %}
+            {% else %}
+                {% if leftDays2 >= 30 %}
+                    <span class="badge badge-pill badge-warning">Warning</span>
+                {% elseif leftDays2 >= 365 %}
+                    <span class="badge badge-pill badge-danger">Danger</span>
+                {% else %}
+                    <span></span>
+            {% endif %}
+
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

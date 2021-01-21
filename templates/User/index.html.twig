@@ -1,0 +1,220 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Page d'acceuil de l'utilisateur{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+    
+
+    <div class="container">
+        <div class="row">
+            <h1>Bienvenue sur la page de l'utilisateur</h1>
+            {# VALUE OF STOCK #}
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Valeur du stock : 
+                            <strong>
+                                {% if allstock.0['SUM'] %}
+                                    {{allstock.0['SUM']}} &euro;
+                                {% else %}
+                                    0 &euro;
+                                {% endif %}
+                                
+                            </strong>
+                        </h5>
+                        <div class="row">
+                            {% for stock in stockbysalepoint %}
+                            
+                                <div class="col-6">
+                                    <div class="card" >
+                                        <div class="card-body">
+                                            <h5 class="card-title">Valeur de :<strong> {{stock.wording}}</strong></h5>
+                                            <p>{{stock.SUM}} &euro;</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# NUMBER OF MADE PRODUCTS #}
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre produits fabriqués : </h5>
+                        <form action="{{path('user_search_number_products_make')}}" method="POST">
+                            <p>Du 
+                                <input type="text" name="produced_products_start_date" id="produced_products_start_date" value="{{numberproduced.new_start_date | date('d/m/Y')}}" class="form-control"> 
+                                au 
+                                <input type="text" name="produced_products_end_date" id="produced_products_end_date" value="{{numberproduced.new_end_date | date('d/m/Y')}}" class="form-control">
+                            </p>
+                            <button type="submit" {{ not app.user.ispremium ? "disabled" }}>Recherche</button>
+                        </form>
+                        <h4><strong>
+                            {% if numberproduced %}
+                                {{numberproduced.product_query.0[1]}}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </strong> produits</h4>
+                        
+                    </div>
+                </div>
+            </div>
+
+            {# NUMBER OF SOLD PRODUCTS #}
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <h5 class="card-title">Nombre produits vendus : </h5>
+                        <form action="{{path('user_search_number_products_sold')}}" method="POST">
+                            <p>Du 
+                                <input type="text" name="sold_products_start_date" id="sold_products_start_date" value="{{soldproducts.new_start_date | date('d/m/Y')}}" class="form-control"> 
+                                au 
+                                <input type="text" name="sold_products_end_date" id="sold_products_end_date" value="{{soldproducts.new_end_date | date('d/m/Y')}}" class="form-control">
+                            </p>
+                            <button type="submit" {{ not app.user.ispremium ? "disabled" }}>Recherche</button>
+                        </form>
+                        <h4><strong>
+                            {% if soldproducts %}
+                                {{soldproducts.product_query.0[1]}}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </strong> produits pour {{soldproducts.product_query.0.SUM}} &euro; </h4>
+                        
+                    </div>
+                </div>
+            </div>
+
+            {# NUMBER OF STOCK AND VALUE TO A DATE #}
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Stock</h5>
+                        <form action="{{path('user_search_number_stock_and_value')}}" method="POST">
+                            <p>au 
+                                <input type="text" name="number_products_in_stock_and_value" id="number_products_in_stock_and_value" class="form-control" value={{numberstockandvalue.new_date | date('d/m/Y')}}>
+                            </p>
+                            <button type="submit" {{ not app.user.ispremium ? "disabled" }}>Rechercher</button>
+                        </form>
+                        <h4><strong>
+                            {% if numberstockandvalue.stock_query.0['COUNT'] %}
+                                {{numberstockandvalue.stock_query.0['COUNT']}}
+                            {% else %}
+                                0
+                            {% endif %}
+                            
+                        </strong>produits pour 
+                            {% if numberstockandvalue.stock_query.0['SUM'] %}
+                                {{numberstockandvalue.stock_query.0['SUM']}}
+                            {% else %}
+                                0
+                            {% endif %}
+                        &euro;</h4>
+                    </div>
+                </div>
+            </div>
+
+            {# NUMBER OF PRODUCTS STOLEN AND PRICE #}
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Produits volés :</h5>
+                        <h4>
+                            <strong>50</strong>
+                            produits pour
+                            <strong>85 &euro;</strong>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            {# PRODUCT LIST #}
+
+            <div class="row pt-5 js-filter">
+                {# FILTER ARTICLES #}
+                    <div class="col-md-3 pt-5" {{ not app.user.ispremium ? "disabled" }}>
+                        {% include "User/article/_filter.html.twig" %}
+                    </div>
+                {# END FILTER ARTICLES #}
+
+                <div class="col-md-9">
+                    <h2>Moyenne de stockage des articles = {{avgstock.0['AVG'] | round}} jours</h2>
+
+                    <div class="d-flex justify-content-end js-filter-sorting">
+                        {% include "User/article/_sorting.html.twig" %}
+                    </div>
+
+                    <table class="table text-center">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col-2" colspan="2">Nom</th>
+                                <th scope="col-2" colspan="2">Famille</th>
+                                <th scope="col-2" colspan="2">Prix(€)</th>
+                                <th scope="col-2" colspan="2">Produit le</th>
+                                <th scope="col-2" colspan="2">Vendu le</th>
+                                <th scope="col-2" colspan="2">Lieu</th>
+                                <th scope="col-2" colspan="2">Durée de stockage</th>
+                                <th scope="col">Succès commerciale</th>
+                            </tr>
+                        </thead>
+                        <tbody class="js-filter-content">
+                            {% include "User/_articles.html.twig" %}
+                        </tbody>
+                    </table>
+
+                    {# PAGINATION #}
+                        <div class="js-filter-pagination">
+                            {% include "User/article/_pagination.html.twig" %}
+                        </div>
+                    {# END PAGINATION #}
+
+                </div>
+            </div>
+            
+
+        </div>
+        {% include "User/partials/sold_products.html.twig" %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" crossorigin="anonymous">
+    </script>
+
+    <script>
+        $(document).ready(function(){
+
+            (function($){
+                $.fn.datepicker.dates['fr'] = {
+                days: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+                daysShort: ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."],
+                daysMin: ["D", "L", "Ma", "Me", "J", "V", "S"],
+                months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+                monthsShort: ["Janv.", "Févr.", "Mars", "Avril", "Mai", "Juin", "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."],
+                today: "Aujourd'hui",
+                monthsTitle: "Mois",
+                clear: "Effacer",
+                weekStart: 1,
+                format: "dd/mm/yyyy"
+                };
+                }(jQuery));
+
+
+
+            $('#produced_products_start_date, #produced_products_end_date, #sold_products_start_date, #sold_products_end_date, #number_products_in_stock_and_value, #sold_product_left_date').datepicker({
+                language: 'fr',
+                startDate: '01/01/2020',
+                endDate: new Date()
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}
+    {% if isEdit %}
+        Edition d'une famille :
+    {% else %}
+        Ajout d'une famille :
+    {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="row col-lg-12">
+            {# DISPLAYS THE FLASH MESSAGES #}
+                {% include "Partials/flash_message.html.twig" %}
+            {# END DISPLAYS THE FLASH MESSAGES #}
+            
+            {# CHECK IF IT IS INDEED THE CUSTOMER'S FAMILY OR IF THE ROUTE ALLOWS TO ADD #}
+                {% if app.user == family.client or app.request.pathInfo == '/user/family/add' %}
+                    {# ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+                        {% if isEdit %}
+                            <h1>Edition de la famille : <strong>{{family.wording}}</strong></h1>
+                        {% else %}
+                            <h1>Ajout d'une famille :</h1>
+                        {% endif %}
+                    {# END ADAPTS THE TITLE ACCORDING TO THE ACTION #}
+
+                    <div class="col-lg-12">
+                        {{form_start(form_family)}}
+                            {{form_widget(form_family)}}
+                            {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                                <button type="submit" class="btn btn-success" {{ not app.user.ispremium ? "disabled" }}>Enregistrer les modifications</button>
+                            {# END DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
+                            
+                            <a href="{{path('user_families')}}" class="btn btn-danger">Annuler</a>
+                        {{form_end(form_family)}}
+                        
+                    </div>
+                {% else %}
+                    <p class="alert alert-danger">Cette page n'est pas disponible</p>
+                    <a href="{{path('user_families')}}">Revenir sur mes familles</a>
+                {% endif %}
+            {# CHECK IF IT IS INDEED THE CUSTOMER'S FAMILY OR IF THE ROUTE ALLOWS TO ADD #}
+            
+        </div>
+        {% include "User/partials/sold_products.html.twig" %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
+{% endblock %}

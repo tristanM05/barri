@@ -1,0 +1,46 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Alerte produits{% endblock %}
+
+{% block body %}
+<div class="container">
+<h1 class="text-center title mt-4">Produits avec date d'expiration dépassée</h1>
+{% include "Partials/flash_message.html.twig" %}
+    <table class="table text-center mt-5 border" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Entrer en stock</th>
+                <th>Date d'expiration</th>
+                <th>Expiré depuis</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for a in article %}
+            <tr onclick="document.location='{{path('user_article_show', {'id': a.id})}}' " class="view_article test">
+                <td><strong>{{a.designation}}</strong></td>
+                <td>{{a.number}}</td>
+                <td>{{a.productiondate | date('d/m/Y')}}</td>
+                <td>{{a.enddate | date('d/m/Y')}}</td>
+                <td><strong class="diff1">{{a.interval}} jours</strong></td>
+                <td>
+                    <form action="{{path('user_article_delete', {'id': a.id})}}" method="POST" style="display:inline-block">
+                        <button type="submit" class="btn action_button"
+                            onclick="return confirm('Confirmer la suppresion de l\' article')"
+                            {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-trash"></i>
+                        </button>
+                        <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ a.id)}}">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {# <button type="button" class="btn action_button mt-4" data-toggle="modal"   data-target="#modalEmail">
+        Envoyer cette liste par mail 
+    </button>
+    {% include "alert/partials/_modal_email.html.twig" %} #}
+</div>
+{% endblock %}

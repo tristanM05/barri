@@ -1,0 +1,35 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Barri'shop{% endblock %}
+
+{% block body %}
+<div class="wrapper-shop">
+    <div class="container-fluid pb-5 text-center">
+    <img src="{{ asset('build/data/barrishop.png') }}" alt="Login_image" class="img-fluid TitleBan" style="width: 23%;">
+        <div class="row mb-5">
+            <div class="col-4 text-center">
+                <img src="{{ asset('build/data/douchette1.png') }}" alt="Login_image" class="img-fluid imgshop">
+                <p class="pShop">Douchette fillaire pour PC</p>
+                <hr class="Bshop">
+                <p class="priceShop">39.90 &euro;</p>
+                <a href="mailto:wdelvaux@idtpe.fr" class="btn action_button_shop">Acheter</a>
+            </div>
+            <div class="col-4 text-center">
+                <img src="{{ asset('build/data/codeBarre.jpg') }}" alt="Login_image" class="img-fluid imgshop">
+                <p class="pShop">Planche d'étiquettes autocollantes <br> avec code-barre du N°1 au N°1500</p>
+                <hr class="Bshop">
+                <p class="priceShop">14.90 &euro;</p>
+                <a href="mailto:wdelvaux@idtpe.fr" class="btn action_button_shop">Acheter</a>
+            </div>
+            <div class="col-4 text-center divShop">
+                <img src="{{ asset('build/data/codeBarre.jpg') }}" alt="Login_image" class="img-fluid imgshop">
+                <p class="pShop">Planche d'étiquettes autocollantes <br> avec code-barre du N°1501 au N°3000</p>
+                <hr class="Bshop">
+                <p class="priceShop">14.90 &euro;</p>
+                <a href="mailto:wdelvaux@idtpe.fr" class="btn action_button_shop">Acheter</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

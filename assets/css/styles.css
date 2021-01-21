@@ -1,0 +1,438 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  line-height: 1.7em;
+  min-height: 100%;
+
+}
+
+a {
+  text-decoration: none;
+}
+
+.title {
+  color: #113d3e;
+  font-weight: bold;
+}
+
+/* 
+********************************* BUTTON *************************  
+*/
+.action_button {
+  background-color: #113d3e;
+  color: #fff;
+}
+
+.action_button:hover {
+  background-color: #c3cf01;
+  color: #fff;
+}
+
+/* 
+********************************* FOOTER *************************  
+*/
+footer {
+  background-color: #113d3e;
+  color: #fff;
+}
+
+footer a {
+  color: whitesmoke;
+}
+
+footer a:hover {
+  color: whitesmoke;
+}
+
+/* 
+*****************************************************************************
+*********************************** CLIENT ***********************************
+*****************************************************************************
+*/
+
+/* 
+***************************** INDEX PAGE OF THE CLIENT *************************  
+*/
+.alert-no-premium {
+  background-color: #113d3e;
+  color: #fff;
+}
+.link-alert-no-premium:hover {
+  color: blueviolet !important;
+}
+
+.not_premium {
+  border-radius: 25px;
+}
+
+/* .close_btn {
+  color: #000;
+  padding: 15px 0 5px 10px;
+  display: block;
+  position: absolute;
+  top: 40px;
+  right: 40px;
+} */
+
+.margin_div_top {
+  margin-top: -75px;
+}
+.margin_div_bottom {
+  margin-top: 75px;
+}
+.cercle {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+}
+
+.content {
+  padding: 40px;
+}
+
+/* 
+***************************** QUAGGA CSS *************************  
+*/
+#interactive.viewport {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  text-align: center;
+}
+#interactive.viewport > canvas,
+#interactive.viewport > video {
+  max-width: 100%;
+  width: 100%;
+}
+.is-loading:before,
+canvas.drawing,
+canvas.drawingBuffer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.is-loading:before {
+  content: "";
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  opacity: 0.5;
+  z-index: 4;
+}
+.is-loading .spinner-border {
+  position: absolute;
+  top: calc(50% - 1rem);
+  left: calc(50% - 1rem);
+  z-index: 5;
+}
+
+/* 
+***************************** WORKSHOP STOCK *************************  
+*/
+.stats_workshop_stock,
+.index_client {
+  padding-top: 100px;
+}
+
+.table td,
+.table tr {
+  border: none !important;
+}
+
+.view_article,
+.table tr {
+  border-left: 2px solid gainsboro !important;
+  border-right: 2px solid gainsboro !important;
+  border-top: 2px solid gainsboro !important;
+}
+
+.view_article:hover {
+  border: 2px solid rgba(17, 61, 62, 0.7) !important;
+  cursor: pointer;
+}
+
+.outside_sale_m {
+  margin-top: -300px;
+  margin-bottom: -300px;
+  color: red;
+}
+.outside_sale_m2 {
+  margin-right: -200px;
+  margin-top: -200px;
+}
+.sold_button {
+  background-color: #113d3e;
+}
+.sold_button:hover {
+  cursor: pointer;
+  background-color: #c3cf01;
+}
+
+.modal-dna {
+  -webkit-box-shadow: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  position: relative !important;
+}
+
+.pagination {
+  padding-left: 200px;
+  padding-top: 15px;
+}
+/* 
+***************************** WORKSHOP SALE *************************  
+*/
+#soldArticle:hover {
+  cursor: pointer;
+}
+
+.notArticle {
+  padding: 200px 0 !important;
+  opacity: 0.75;
+}
+
+/* 
+***************************** MANAGEMENT *************************  
+*/
+
+.gradiant {
+  width: 100%;
+  height: 55px;
+  background: linear-gradient(to right, green, orange, red);
+  border-radius: 20px;
+  color: whitesmoke;
+}
+
+.gradiant_content {
+  width: 33%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.try {
+  margin-left: 15px;
+}
+
+.min-height-management {
+  min-height: 250px;
+  border-radius: 10px;
+}
+
+.div1 {
+  position: relative;
+  z-index: 0;
+}
+
+.div_right_Barri {
+  position: absolute;
+  z-index: 1;
+}
+
+.div2 {
+  margin-left: 379px;
+  padding: 19px;
+  margin-top: 2px;
+  border: 27px rgb(151, 191, 15) solid;
+  border-radius: 15px 15px 15px 0;
+  min-height: 100px;
+  max-height: 60%;
+}
+
+.div_button {
+  position: absolute;
+  z-index: 1;
+  margin-bottom: 100px;
+  background-color: blue;
+}
+
+.border_title_scoreboard {
+  border: 1px #113d3e solid;
+  border-radius: 5px;
+}
+
+.horizontal_hr {
+  position: absolute;
+  z-index: 1;
+  margin-left: 30px;
+  margin-top: 20px;
+  min-width: 1px;
+  max-width: 1px;
+  min-height: 90%;
+  /* max-height: 50%; */
+  background-color: #113d3e;
+}
+
+.p_in_div_management {
+  font-size: 20px;
+}
+
+/* 
+***************************** SUBSCRIPTION *************************  
+*/
+
+.text_green {
+  color: #113d3e;
+}
+
+.price {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  display: inline-flex;
+  padding: 0 0 100px;
+}
+.table {
+  width: 25%;
+  padding: 0;
+  margin: 0;
+}
+.table:hover {
+  border: 2px solid #dcdcdc;
+}
+.table_title {
+  text-align: center;
+  color: #5b5b5b;
+  padding: 50px 0;
+  font-size: 25px;
+}
+.table,
+.table_list_item,
+.table_price,
+.table_text {
+  border: 0.1px solid #f5f5f5;
+}
+.table_item {
+  list-style-type: none;
+}
+.table_item,
+.table_list_item {
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+}
+.table_text,
+.table_text_selected {
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+.table_text:hover,
+.table_text_selected {
+  color: #19ceab;
+}
+
+.table_price,
+.table_price_selected {
+  background-color: #242038;
+  color: #fff;
+  padding: 10px 0;
+}
+.table_price:hover,
+.table_price_selected,
+.active_subscription {
+  background-color: #19ceab;
+}
+.table_price_selected span,
+.table_price span {
+  font-size: 25px;
+  font-weight: 700;
+}
+.table_button,
+.table_button_selected,
+.table_button_selected a,
+.table_button a {
+  background-color: #242038;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 15px 30px;
+  border-radius: 3px;
+  border: none;
+  margin: 15px 0;
+}
+.table_button:hover,
+.table_button_selected,
+.table_button_selected a,
+.table_button a:hover,
+.active_subscription {
+  background-color: #19ceab;
+}
+.content_align {
+  padding-top: 12px;
+}
+
+.container {
+  min-height: 700px !important;
+}
+
+.border_premium_1,
+.border_premium_3 {
+  border-top: 1px #242038 solid;
+  border-left: 1px #242038 solid;
+  border-bottom: 1px #242038 solid;
+}
+.border_premium_2 {
+  border-left: 1px #242038 solid;
+}
+
+/* 
+*****************************************************************************
+*********************************** ADMIN ***********************************
+*****************************************************************************
+*/
+.admin_login {
+  padding-top: 200px;
+}
+
+.td_width {
+  width: 200px;
+}
+#contenu {
+  font: Verdana, Geneva, sans-serif;
+  font-size: 18px;
+  text-align: left;
+  min-height: 400px;
+  display: table;
+  width: 100%;
+}
+#contenu p {
+  vertical-align: middle;
+  display: table-cell;
+  opacity: 0.5;
+}
+.managementBar {
+  width: 30% !important;
+}
+.bar {
+  height: 100%;
+  max-height: 50px;
+  width: 3px;
+  display: inline-flex;
+  background-color: #000;
+  color: #000;
+}
+
+.mr-10 {
+  margin-right: 120px;
+}
+
+.padding_pagination {
+  padding-left: 200px;
+  padding-top: 20px;
+}
+
+/* 
+*****************************************************************************
+******************************** MEDIA QUERIES ******************************
+*****************************************************************************
+*/
+
+@media screen and (max-width: 1700px) {
+  #span_quagga {
+    display: block !important;
+  }
+}

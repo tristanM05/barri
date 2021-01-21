@@ -1,0 +1,35 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}Ma boutique{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center titlesold">
+        <img src="{{ asset('build/data/soldtitle.png') }}" alt="Login_image" class="img-fluid TitleBan2">
+    </div>
+    <div id="shopText">
+        <p class="m-0">
+            Dans cette rubrique vous pouvez entrez différentes informations concernant votre boutique. <br>
+            Cela permettra a vos clients de vous identifier et mieux  vous connaitre dans l'espace de vente !
+        </p>
+    </div>
+    <div>
+        {% if myShop %}
+            <div class="card mt-5">
+                <div class="card-header d-flex">
+                    <h5 class="title mt-2">Ma boutique</h5>
+                    <a href="{{ path('editShop',{id:myShop.id})}}" class="btn action_button ml-auto">Editer ma boutique</a>
+                </div>
+                <div class="card-body">
+                    <strong><p class="textMyShop">{{myShop.name}}</p></strong>
+                    <p class="textMyShop">{{myShop.adress}}</p>
+                    <p class="textMyShop">{{myShop.description}}</p>
+                    <h5 class="title">Image</h5>
+                </div>
+            </div>
+        {% else %}
+            <a href="{{ path('addShop')}}" class="btn action_button mt-3 mr-2">Ajouter ma boutique</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

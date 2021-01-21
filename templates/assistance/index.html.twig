@@ -1,0 +1,31 @@
+{% extends "User/base_user.html.twig" %}
+
+{% block title %}Assistance{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="text-center">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center" style="width:100%">
+                {{message}}
+            </div>
+        {% endfor %}
+        <img class="titles" src="{{asset('build/data/assistTile.png')}}" alt="titleassistance">
+
+        <h1 id="assisth1">Comment contacter <span>BARRI ?</span></h1>
+        <div>
+            <p id="assistp" class="text-center mt-4">
+                Votre service client et vos experts métiers sont à votre disposition <br>
+                pour répondre à toutes vos questions et vous accompagner
+            </p>
+            <button type="button" class="btn action_button mb-4" data-toggle="modal" data-target="#modalContact">Signaler ou demander un correctif au Service Technique <i class="fas fa-mouse-pointer"></i></button>
+        </div>
+        <div>
+            <div>
+                <img id="divAssit" src="{{asset('build/data/contenu.png')}}" alt="contact" width="500" height="400">
+            </div>
+        </div>
+    </div>
+    {% include "assistance/partials/_modal.html.twig" %}
+</div>
+{% endblock %}

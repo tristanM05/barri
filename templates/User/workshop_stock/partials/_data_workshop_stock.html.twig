@@ -1,0 +1,59 @@
+<div class="col-9 text-center stats_workshop_stock">
+    <div class="row">
+        <img src="{{asset('build/data/stock1.png')}}" class="img-fluid imgstock" alt="bulle">
+        <div class="col-8 mt-5 p-0 dataStock">
+            <p>
+                Le stock atelier est valorisé à
+                <strong>
+                    {% if stockCount['stock_query'].0['SUM'] %}
+                        {{stockCount['stock_query'].0['SUM']|number_format(2, '.',' ')}} &euro;
+                    {% else %}
+                        0 &euro;
+                    {% endif %}
+
+                </strong>
+                à ce jour.
+                
+
+            </p>
+            <p>
+                Il y actuellement
+                <strong>
+                    {% if stockCount['stock_query'].0['COUNT'] %}
+                        {% if stockCount['stock_query'].0['COUNT'] == 1 %}
+                            {{stockCount['stock_query'].0['COUNT']}} produit
+                        {% else %}
+                            {{stockCount['stock_query'].0['COUNT']}} produits
+                        {% endif %}
+                    {% else %}
+                        0 produit
+                    {% endif %}
+                </strong>
+                en stock.
+                
+            </p>
+            <p>
+                En moyenne, vos articles sont en stock
+                <strong>
+                    {{avgstock.0['AVG'] | round}}
+                </strong>
+                jours.
+            </p>
+                <div>
+                    {% if alert %}
+                        <p id="alert1">Alerte sur les dates limites en approche. <a href="{{path('alert')}}">voir</a></p>
+                    {% else %}
+                    {% endif %}
+                    {% if alert2 %}
+                    <p id="alert2">Alerte, visualisez les produits arrivés à expiration. <a href="{{path('alert2')}}">voir</a></p>
+                    {% endif %}
+                </div>
+        </div>
+        <div class="col-4 text-left pt-4 btnHisto">
+                <button type="button" class="btn action_button mt-3" data-toggle="modal" data-target="#graphCountStock">
+                    Voir l'historique
+                </button>
+        </div>
+    </div>
+</div>
+

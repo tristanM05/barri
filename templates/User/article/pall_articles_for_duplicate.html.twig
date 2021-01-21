@@ -1,0 +1,65 @@
+{% extends 'User/base_user.html.twig' %}
+
+{% block title %}Choisir un article à dupliquer{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+        <div class="row js-filter">
+
+            {# FILTER ARTICLES #}
+                <div class="col-md-3 pt-5">
+                    {% include "User/article/_filter.html.twig" %}
+                </div>
+            {# END FILTER ARTICLES #}
+
+            <div class="col-lg-9">
+                <h1>Mes articles</h1>
+                <a href="{{ path('user_workshop_stock') }}" class="btn action_button">Annuler</a>
+                {# DISPLAYS THE FLASH MESSAGES #}
+                    {% include "Partials/flash_message.html.twig" %}
+                {# END DISPLAYS THE FLASH MESSAGES #}
+
+                <div class="d-flex justify-content-end js-filter-sorting">
+                    {% include "User/article/_sorting.html.twig" %}
+                </div>
+
+                <table class="table text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col-2" colspan="2">Nom</th>
+                            <th scope="col-2" colspan="2">Prix de référence</th>
+                            <th scope="col-2" colspan="2">Date de production</th>
+                            {# <th scope="col-2" colspan="2">Date de sortie</th> #}
+                            <th scope="col-2" colspan="2">Status</th>
+                            <th scope="col-2" colspan="2">Visible</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="js-filter-content">
+                        {% include "User/article/_articles_duplicate.html.twig" %}
+                    </tbody>
+                </table>
+
+                {# PAGINATION #}
+                    <div class="js-filter-pagination">
+                        {% include "User/article/_pagination.html.twig" %}
+                    </div>
+                {# END PAGINATION #}
+            </div>
+        </div>
+
+        {# SOLD A PRODUCT #}
+            {% include "User/partials/sold_products.html.twig" %}
+        {# END SOLD A PRODUCT #}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
+{% endblock %}
