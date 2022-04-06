@@ -41,12 +41,12 @@
             </p>
                 <div>
                     {% if alert %}
-                        <p id="alert1">Alerte sur les dates limites en approche. <a href="{{path('alert')}}">voir</a></p>
+                        <p id="alert1">Alerte sur les dates d'expiration en approche. <a class="btn action_button" data-toggle="modal" data-target="#modalAlert"><i class="fas fa-eye"></i></a></p>
                     {% else %}
                     {% endif %}
-                    {% if alert2 %}
+                    {# {% if alert2 %}
                     <p id="alert2">Alerte, visualisez les produits arrivés à expiration. <a href="{{path('alert2')}}">voir</a></p>
-                    {% endif %}
+                    {% endif %} #}
                 </div>
         </div>
         <div class="col-4 text-left pt-4 btnHisto">

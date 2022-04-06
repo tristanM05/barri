@@ -1,0 +1,53 @@
+<div class="modal fade bd-example-modal-xl" tabindex="-1" id="modalExpired" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dna" role="document" style="width:100%">
+        <div class="modal-content text-center justify-content-center">
+            <div class="modal-header d-flex">
+                <h5 class="modal-title title" id="exampleModalCenterTitle">Produit(s) arriver à expiration </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body justify-content-center">
+                <table class="table text-center border" style="width:100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Code</th>
+                            <th>Entrez en stock</th>
+                            <th>Date d'expiration</th>
+                            <th>Expiré depuis</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in expired %}
+                        <tr onclick="document.location='{{path('user_article_show', {'id': e.id})}}' "
+                            class="view_article test">
+                            <td><strong>{{e.designation}}</strong></td>
+                            <td>{{e.number}}</td>
+                            <td>{{e.productiondate | date('d/m/Y')}}</td>
+                            <td>{{e.enddate | date('d/m/Y')}}</td>
+                            {% if e.enddate != now %}
+                                <td><strong class="diff1">{{e.interval}} jours</strong></td>
+                            {% else %}
+                                <td><strong class="diff1">Aujourd'hui</strong></td>
+                            {% endif %}
+                            <td>
+                                <form action="{{path('user_article_delete', {'id': e.id})}}" method="POST"
+                                    style="display:inline-block">
+                                    <button type="submit" class="btn action_button"
+                                        onclick="return confirm('Confirmer la suppresion de l\' article')"
+                                        {{ not app.user.ispremium ? "disabled" }}><i class="fas fa-trash"></i>
+                                    </button>
+                                    <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ e.id)}}">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

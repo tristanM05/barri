@@ -1,0 +1,265 @@
+
+{% block body %}
+<div>
+    {% for j in journal %}
+    <div class="infoJournal">
+            <div class="infoJournalDiv">
+                <p class="pJournal">Total de la caisse en début de journée:<span>{{j.totalStart}} €</span></p>
+                <p class="espJournal">Dont: <span>{{j.totalEspStart}} €</span> en espèce</p>
+            </div>
+            <div>
+                <p class="pJournal">Total de la caisse en fin de journée: <span>{{j.totalEnd}} €</span></p>
+                <p class="espJournal">Dont: <span>{{j.totalEsp}} €</span> en espèce</p>
+            </div>
+        </div>
+    <div id="journalContainer">
+        <div>
+            <div class="d-flex">
+                <div class="d-flex">
+                    <p class="mr-2" id="titleJournal">
+                        Historique des encaissements et décaissements du
+                    </p>
+                    <div class="mt-2 mr-2">
+                        {{ form_start(formSearch, {attr: {class: 'formDate'}}) }}
+                        {{form_row(formSearch.date, {attr:{value : j.date | date('Y-m-d')}})}}
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" id="formSearch" class="action_button btn text-light">valider</button>
+                        {{ form_end(formSearch) }}
+                    </div>
+                </div>
+                <a href="{{path('csvDate')}}" class="action_button btn text-end btnTableur" id="btnTab">Export tableur</a>
+            </div>
+            <table class="table text-center table-hover tableJournal" style="width:100%">
+                <thead class="thead-dark">
+                    <th>
+                        <p>Date/heure</p>
+                    </th>
+                    <th class="thReduit">
+                        {% if j.date == date %}
+                            <div class="mb-0 d-flex total">
+                                <p class="mb-0">Encaissement</p>
+                                <a class="text-light ml-2" id="dropDownEnc"><i class="fas fa-plus plusDropDown"></i></a>
+                            </div>
+                            <small>Total: {{j.totalEnc}} €</small>
+                            <div class="dropDownFormEnc">
+                                <div class="p-1">
+                                    <p class="text-dark m-0 pr-2 text-right" id="ValidFormEnc">x</p>
+                                    {{ form_start(formEnc) }}
+                                    {# {{ form_row(formEnc.total) }} #}
+                                    {{ form_row(formEnc.comment) }}
+                                    <div class="d-flex divMontant">
+                                        {{ form_row(formEnc.cb) }}
+                                        {{ form_row(formEnc.esp) }}
+                                    </div>
+                                    <div class="d-flex divMontant">
+                                        {{ form_row(formEnc.chq) }}
+                                        {{ form_row(formEnc.other) }}
+                                    </div>
+                                    <small class="mt-0">* <strong>un seul</strong> mode de paiement possible</small>
+                                    <button type="submit" class="action_button btn btn-block">Valider</button>
+                                    {{ form_end(formEnc) }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="mb-0 total">
+                                <p class="mb-0">Encaissement</p>
+                            </div>
+                            <small class="ml-4">Total: {{j.totalEnc}} €</small>
+                        {% endif %}
+                    </th>
+                    <th class="thReduit">
+                        {% if j.date == date %}
+                            <div class="mb-0 d-flex total">
+                                <p class="mb-0">Deccaissement</p>
+                                <a class="text-light ml-2" id="dropDown"><i class="fas fa-plus plusDropDown"></i></a>
+                            </div>
+                            <small>Total: {{j.totalDec}} €</small>
+                            <div class="dropDownForm">
+                                <div class="p-1">
+                                    <p class="text-dark m-0 pr-2 text-right" id="ValidFormDec">x</p>
+                                    {{ form_start(form) }}
+                                    {# {{ form_row(form.amout) }} #}
+                                    {{ form_row(form.comment) }}
+                                    <div class="d-flex divMontant">
+                                        {{form_row(form.cb)}}
+                                        {{form_row(form.esp)}}
+                                    </div>
+                                    <div class="d-flex divMontant">
+                                        {{form_row(form.chq)}}
+                                        {{form_row(form.other)}}
+                                    </div>
+                                    <small class="mt-0 text-dark">* <strong>un seul</strong> mode de paiement possible</small>
+                                    <button type="submit"
+                                        class="action_button btn btn-block text-light">Valider</button>
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="mb-0 total">
+                                <p class="mb-0">Deccaissement</p>
+                            </div>
+                            <small class="ml-4">Total: {{j.totalDec}} €</small>
+                        {% endif %}
+                    </th>
+                    <th class="thCom">
+                        <p>Commentaire</p>
+                    </th>
+                    <th>
+                        <p class="mb-0"><i class="fab fa-cc-mastercard iconPayment"></i></p>
+                        <small>Total: {{j.totalCb}} €</small>
+                    </th>
+                    <th>
+                        <p class="mb-0"><i class="fas fa-coins iconPayment"></i></p>
+                        <small>Total: {{j.totalEsp}} €</small>
+                    </th>
+                    <th>
+                        <p class="mb-0"><i class="fas fa-money-check iconPayment"></i></p>
+                        <small>Total: {{j.totalChq}} €</small>
+                    </th>
+                    <th>
+                        <p class="mb-0">Autres</p>
+                        <small>Total: {{j.totalOther}} €</small>
+                    </th>
+                </thead>
+                {% if enc %}
+                {% for encaissements in j.encaissements %}
+                <tbody>
+                    <tr>
+                        <td>
+                            <p class="pLign">{{encaissements.date | date('d/m/Y à H:m')}}<i
+                                    class="fas fa-angle-down ml-2 openArticle"></i></p>
+                            <div class="text-center articleForEnc d-none ml-3">
+                                {% for v in encaissements.vente %}
+                                <hr>
+                                <div class="d-flex ml-2 text-muted">
+                                    <p class="ml-2 pArticle">{{v.article.number}}</p>
+                                    <p class="ml-2 pArticle">{{v.article.designation}}</p>
+                                    <p class="ml-2 pArticle">{{v.price}} € X</p>
+                                    <p class="ml-2 pArticle">{{v.quantity}}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>{{encaissements.total}} €</td>
+                        <td></td>
+                        <td>{{encaissements.comment}}</td>
+                            {% if encaissements.cb == "0.00" %}
+                        <td>/</td>
+                        {% elseif encaissements.cb == null %}
+                        <td>/</td>
+                        {% else %}
+                        <td>{{encaissements.cb}} €</td>
+                        {% endif %}
+                        {% if encaissements.esp == "0.00" %}
+                        <td>/</td>
+                        {% elseif encaissements.esp == null %}
+                        <td>/</td>
+                        {% else %}
+                        <td>{{encaissements.esp}} €</td>
+                        {% endif %}
+                        {% if encaissements.chq == "0.00" %}
+                        <td>/</td>
+                        {% elseif encaissements.chq == null %}
+                        <td>/</td>
+                        {% else %}
+                        <td>{{encaissements.chq}} €</td>
+                        {% endif %}
+                        {% if encaissements.other == "0.00" %}
+                        <td>/</td>
+                        {% elseif encaissements.other == null %}
+                        <td>/</td>
+                        {% else %}
+                        <td>{{encaissements.other}} €</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+                {% endfor %}
+                {% endif %}
+                {% if dec %}
+                {% for d in j.decaissements %}
+                <tbody>
+                    <td class="Ddate">{{d.date | date('d/m/Y à H:m')}}</td>
+                    <td></td>
+                    <td class="decLign">{{d.amout}} €</td>
+                    <td>{{d.comment}}</td>
+                    {% if d.cb == "0.00" %}
+                    <td>/</td>
+                    {% elseif d.cb == null %}
+                    <td>/</td>
+                    {% else %}
+                    <td class="decLign">- {{d.cb}} €</td>
+                    {% endif %}
+                    {% if d.esp == "0.00" %}
+                    <td>/</td>
+                    {% elseif d.esp == null %}
+                    <td>/</td>
+                    {% else %}
+                    <td class="decLign">- {{d.esp}} €</td>
+                    {% endif %}
+                    {% if d.chq == "0.00" %}
+                    <td>/</td>
+                    {% elseif d.chq == null %}
+                    <td>/</td>
+                    {% else %}
+                    <td class="decLign">- {{d.chq}} €</td>
+                    {% endif %}
+                    {% if d.other == "0.00" %}
+                    <td>/</td>
+                    {% elseif d.other == null %}
+                    <td>/</td>
+                    {% else %}
+                    <td class="decLign">- {{d.other}} €</td>
+                    {% endif %}
+                </tbody>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+{% block javascripts %}
+<script>
+    var dateJournal = document.getElementById("date").value;
+    console.log(dateJournal);
+</script>
+<script>
+    //dropDownFormDec
+    const button = document.querySelector('#dropDown');
+    const form = document.querySelector('.dropDownForm');
+    const ValidButtonDec = document.querySelector('#ValidFormDec')
+    button.addEventListener('click', () => {
+        form.style.display = "block";
+    })
+    ValidButtonDec.addEventListener('click', () => {
+        form.style.display = "none";
+    })
+
+    //dropDownFormEnc
+    const buttonEnc = document.querySelector('#dropDownEnc');
+    const formEnc = document.querySelector('.dropDownFormEnc');
+    const ValidButtonEnc = document.querySelector('#ValidFormEnc')
+    buttonEnc.addEventListener('click', () => {
+        formEnc.style.display = "block";
+    })
+    ValidButtonEnc.addEventListener('click', () => {
+        formEnc.style.display = "none";
+    })
+
+    //dropdonw articleForEnc
+    const open = document.querySelectorAll('.openArticle');
+
+    open.forEach(button => {
+        button.addEventListener('click', e => {
+            e.preventDefault();
+            var line = e.target.parentElement.parentElement;
+            var articles = line.querySelector(' .articleForEnc');
+            articles.classList.toggle('d-none');
+        })
+    })
+</script>
+{% endblock %}
+
+    

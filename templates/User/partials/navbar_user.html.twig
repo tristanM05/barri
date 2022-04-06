@@ -22,9 +22,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('user_outside_sale') }}">Vente extérieur</a>
             </li> #}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('user_outside_sale') }}">Barri'store</a>
-            </li>
+            {% if not app.user.isPremium %}  
+                <li class="nav-item">
+                    <a class="nav-link" href="">Barri'store</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('user_outside_sale') }}">Barri'store</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="{{path('user_management')}}">Gestion</a>
             </li>

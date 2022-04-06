@@ -136,6 +136,36 @@ class Client implements UserInterface
      */
     private $check;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ventes", mappedBy="client")
+     */
+    private $ventes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Decaissement", mappedBy="user")
+     */
+    private $decaissements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Encaissement", mappedBy="client")
+     */
+    private $encaissements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Journal", mappedBy="client")
+     */
+    private $journals;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="client")
+     */
+    private $categories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Fournisseur", mappedBy="client")
+     */
+    private $fournisseurs;
+
 
 
     public function __construct()
@@ -145,6 +175,12 @@ class Client implements UserInterface
         $this->subfamilies = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->stockClients = new ArrayCollection();
+        $this->ventes = new ArrayCollection();
+        $this->decaissements = new ArrayCollection();
+        $this->encaissements = new ArrayCollection();
+        $this->journals = new ArrayCollection();
+        $this->categories = new ArrayCollection();
+        $this->fournisseurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -562,6 +598,192 @@ class Client implements UserInterface
     public function setCheck($check)
     {
         $this->check = $check;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ventes[]
+     */
+    public function getVentes(): Collection
+    {
+        return $this->ventes;
+    }
+
+    public function addVente(Ventes $vente): self
+    {
+        if (!$this->ventes->contains($vente)) {
+            $this->ventes[] = $vente;
+            $vente->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVente(Ventes $vente): self
+    {
+        if ($this->ventes->contains($vente)) {
+            $this->ventes->removeElement($vente);
+            // set the owning side to null (unless already changed)
+            if ($vente->getClient() === $this) {
+                $vente->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Decaissement[]
+     */
+    public function getDecaissements(): Collection
+    {
+        return $this->decaissements;
+    }
+
+    public function addDecaissement(Decaissement $decaissement): self
+    {
+        if (!$this->decaissements->contains($decaissement)) {
+            $this->decaissements[] = $decaissement;
+            $decaissement->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDecaissement(Decaissement $decaissement): self
+    {
+        if ($this->decaissements->contains($decaissement)) {
+            $this->decaissements->removeElement($decaissement);
+            // set the owning side to null (unless already changed)
+            if ($decaissement->getUser() === $this) {
+                $decaissement->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Encaissement[]
+     */
+    public function getEncaissements(): Collection
+    {
+        return $this->encaissements;
+    }
+
+    public function addEncaissement(Encaissement $encaissement): self
+    {
+        if (!$this->encaissements->contains($encaissement)) {
+            $this->encaissements[] = $encaissement;
+            $encaissement->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEncaissement(Encaissement $encaissement): self
+    {
+        if ($this->encaissements->contains($encaissement)) {
+            $this->encaissements->removeElement($encaissement);
+            // set the owning side to null (unless already changed)
+            if ($encaissement->getClient() === $this) {
+                $encaissement->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Journal[]
+     */
+    public function getJournals(): Collection
+    {
+        return $this->journals;
+    }
+
+    public function addJournal(Journal $journal): self
+    {
+        if (!$this->journals->contains($journal)) {
+            $this->journals[] = $journal;
+            $journal->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJournal(Journal $journal): self
+    {
+        if ($this->journals->contains($journal)) {
+            $this->journals->removeElement($journal);
+            // set the owning side to null (unless already changed)
+            if ($journal->getClient() === $this) {
+                $journal->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
+            // set the owning side to null (unless already changed)
+            if ($category->getClient() === $this) {
+                $category->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fournisseur[]
+     */
+    public function getFournisseurs(): Collection
+    {
+        return $this->fournisseurs;
+    }
+
+    public function addFournisseur(Fournisseur $fournisseur): self
+    {
+        if (!$this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs[] = $fournisseur;
+            $fournisseur->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseur(Fournisseur $fournisseur): self
+    {
+        if ($this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs->removeElement($fournisseur);
+            // set the owning side to null (unless already changed)
+            if ($fournisseur->getClient() === $this) {
+                $fournisseur->setClient(null);
+            }
+        }
 
         return $this;
     }

@@ -23,11 +23,11 @@ class Article
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=25)
      * @Assert\Length(min="1",minMessage="Le numéro d'identification doit faire minimum 1 caractère")
-     * @Assert\Type("numeric")
      */
     private $number;
+    // * @Assert\Type("numeric")
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -99,14 +99,61 @@ class Article
     private $images;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $endDate;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $dateLimit;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true))
+     * @Assert\GreaterThan("0", message="Le stock ne peut pas être inférieur a 0")
+     */
+    private $quantity;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2)
+     */
+    private $totalPrice;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ventes", mappedBy="article", orphanRemoval=true)
+     */
+    private $ventes;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $alert;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lots", mappedBy="article")
+     */
+    private $lots;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isLots;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="article")
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Fournisseur", inversedBy="article")
+     */
+    private $fournisseur;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $alert_stock;
+
 
     public function getInterval(){
         $now = new \DateTime('now');
@@ -115,9 +162,18 @@ class Article
         return $diff->days;
     }
 
+    public function getAlertDate(){
+        $alert = $this->endDate;
+        $alert->setTime(0,0,0);
+        $alert->modify('-'.$this->dateLimit. 'day');
+        return $alert;
+    }
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->ventes = new ArrayCollection();
+        $this->lots = new ArrayCollection();
     }
 
 
@@ -325,14 +381,160 @@ class Article
         return $this;
     }
 
-    public function getDateLimit(): ?\DateTimeInterface
+    public function getDateLimit(): ?int
     {
         return $this->dateLimit;
     }
 
-    public function setDateLimit(?\DateTimeInterface $dateLimit): self
+    public function setDateLimit(?int $dateLimit): self
     {
         $this->dateLimit = $dateLimit;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getTotalPrice(): ?string
+    {
+        return $this->totalPrice;
+    }
+
+    public function setTotalPrice(string $totalPrice): self
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ventes[]
+     */
+    public function getVentes(): Collection
+    {
+        return $this->ventes;
+    }
+
+    public function addVente(Ventes $vente): self
+    {
+        if (!$this->ventes->contains($vente)) {
+            $this->ventes[] = $vente;
+            $vente->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVente(Ventes $vente): self
+    {
+        if ($this->ventes->contains($vente)) {
+            $this->ventes->removeElement($vente);
+            // set the owning side to null (unless already changed)
+            if ($vente->getArticle() === $this) {
+                $vente->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAlert(): ?\DateTimeInterface
+    {
+        return $this->alert;
+    }
+
+    public function setAlert(?\DateTimeInterface $alert): self
+    {
+        $this->alert = $alert;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lots[]
+     */
+    public function getLots(): Collection
+    {
+        return $this->lots;
+    }
+
+    public function addLot(Lots $lot): self
+    {
+        if (!$this->lots->contains($lot)) {
+            $this->lots[] = $lot;
+            $lot->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLot(Lots $lot): self
+    {
+        if ($this->lots->contains($lot)) {
+            $this->lots->removeElement($lot);
+            // set the owning side to null (unless already changed)
+            if ($lot->getArticle() === $this) {
+                $lot->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIsLots(): ?bool
+    {
+        return $this->isLots;
+    }
+
+    public function setIsLots(?bool $isLots): self
+    {
+        $this->isLots = $isLots;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getFournisseur(): ?Fournisseur
+    {
+        return $this->fournisseur;
+    }
+
+    public function setFournisseur(?Fournisseur $fournisseur): self
+    {
+        $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    public function getAlertStock(): ?int
+    {
+        return $this->alert_stock;
+    }
+
+    public function setAlertStock(?int $alert_stock): self
+    {
+        $this->alert_stock = $alert_stock;
 
         return $this;
     }

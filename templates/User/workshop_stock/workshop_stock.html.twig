@@ -34,10 +34,28 @@
                     
                     {# DEACTIVATE BUTTON IF CUSTOMER IS NOT PREMIUM #}
                     <div class="d-inline-flex" style="width:72%">
-                        <a href="{{path('user_article_add')}}" class="btn action_button my-2"><i class="fas fa-plus"></i></a>
-                        {% if expired %}
-                            <a href="{{path('expiredDate')}}" class="btn btn-danger my-2 ml-3">Articles expirés</a>
+                    {% if not app.user.isPremium %}
+                        {% if count == 10 %}
+                            <div class="d-flex">
+                                <button type="button" class="btn action_button my-2" disabled><i class="fas fa-plus"></i></button>
+                                <p id="pBasic">Limite maximum d'articles atteinte. Passer au compte premium pour profiter pleinement de <span>Barri</span> !</p>
+                            </div>
                         {% else %}
+                            <a href="{{path('user_article_add')}}" class="btn action_button my-2">Ajoutez un produit</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{path('user_article_add')}}" class="btn action_button my-2">Ajoutez un produit</a>
+                    {% endif %}
+                        {% if expired %}
+                            <button id="btnExpired" class="btn my-2 ml-3" data-toggle="modal" data-target="#modalExpired">
+                                Produits expirés
+                            </button>
+                        {% else %}
+                        {% endif %}
+                        {% if alertStock %}
+                            <button id="btnExpired" class="btn my-2 ml-3" data-toggle="modal" data-target="#modalStock">
+                                Alerte stock bas
+                            </button>
                         {% endif %}
                     </div>
                         
@@ -49,18 +67,15 @@
                         </div>
                     {# END SORTING ARTICLES #}
                     
-
-                    
-                    
-                    <table class="table text-center" style="width:100%">
+                    <table class="table text-center tableStock" style="width:100%">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col-1" colspan="1">Dupliquer</th>
-                                <th scope="col-2" colspan="2">Nom</th>
                                 <th scope="col-2" colspan="2">Code</th>
+                                <th scope="col-2" colspan="2">Nom</th>
                                 <th scope="col-2" colspan="2">Prix</th>
-                                <th scope="col-2" colspan="2">Entrer en stock</th>
-                                {# <th scope="col-2" colspan="2">Date de sortie</th> #}
+                                <th scope="col-2" colspan="2">Entrez en stock</th>
+                                <th scope="col-2" colspan="2">Quantité</th>
                                 <th scope="col-2" colspan="2">Statut</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -92,7 +107,7 @@
                     <button type="button" class="btn action_button mx-4" data-toggle="modal"   data-target="#modalEmail">
                         Envoyer mes articles par mail 
                     </button>
-                    {# <a href="{{ path('user_print_datas') }}" class="btn action_button" target="_blank">Imprimer / télécharger la liste de mes articles</a> #}
+                    <a href="{{ path('user_print_datas') }}" class="btn action_button" target="_blank">Imprimer / télécharger la fiche inventaire</a>
 
                 
             </div>
@@ -101,6 +116,9 @@
         {% include "User/workshop_stock/partials/_modal_send_datas_by_email.html.twig" %}
         {% include "User/workshop_stock/partials/_modal_graph_count_stock.html.twig" %}
         {% include "User/workshop_stock/partials/_modal_graph_quantity_stock.html.twig" %}
+        {% include "User/workshop_stock/partials/_expired.html.twig" %}
+        {% include "User/workshop_stock/partials/_alert.html.twig" %}
+        {% include "User/workshop_stock/partials/_stock.html.twig" %}
                 
 
 

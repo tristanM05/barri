@@ -1,14 +1,26 @@
 {% for article in articles %}
         <tr onclick="document.location='{{path('user_article_show', {'id': article.id})}}' " class="view_article test">
-            <td colspan="1">
-                <a href="{{path('user_duplicate_article', {'id': article.id})}}" class="btn action_button"><i class="fas fa-clone"></i></a>
-            </td>
+            {% if not app.user.isPremium %}
+                {% if count == 10 %}
+                    <td colspan="1">
+                        <button class="btn action_button" disabled><i class="fas fa-clone"></i></a>
+                    </td>
+                {% else %}
+                    <td colspan="1">
+                    <a href="{{path('user_duplicate_article', {'id': article.id})}}" class="btn action_button"><i class="fas fa-clone"></i></a>
+                </td>
+                {% endif %}
+            {% else %}
+                <td colspan="1">
+                    <a href="{{path('user_duplicate_article', {'id': article.id})}}" class="btn action_button"><i class="fas fa-clone"></i></a>
+                </td>
+            {% endif %}
+            <td colspan="2"><strong>{{article.number}}</strong></td>
             {% if article.designation | length >= 48 %}
                     <td colspan="2"><strong>{{article.designation|slice(0,48)}}...</strong></td>
             {% else %}
                     <td colspan="2"><strong>{{article.designation}}</strong></td>
             {% endif %}
-            <td colspan="2"><strong>{{article.number}}</strong></td>
             <td colspan="2">{{article.referenceprice}} €</td>
             <td colspan="2">
                 {# DISPLAY THE PRODUCTION DATE IN TWIG FORMAT #}
@@ -29,6 +41,11 @@
                 {% endif %}
                 END DISPLAY THE LEFT DATE IN TWIG FORMAT
                 </td> #}
+            {% if article.quantity <= article.alertStock %}
+                <td colspan="2"><strong class="text-danger">{{article.quantity}}</strong></td>
+            {% else %}
+                <td colspan="2"><strong>{{article.quantity}}</strong></td>
+            {% endif %}
             <td colspan="2">
                 {# DISPLAY BY PRODUCT STATUS #}
                     {% if article.productstatus.wording == 'en vente' %}

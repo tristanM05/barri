@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MentionsController!{% endblock %}
+
+{% block body %}
+    <div id="mentions" class="container">
+        <div class="card">
+            <div class="card-header d-flex">
+                <p>Mentions Légales</p> 
+            </div>
+            <div class="card-body">
+                <p>
+                    Mentions légales :  
+
+                    Dénomination sociale : SAS IdTPE <br>
+
+                    Forme juridique de la société SAS <br>
+
+                    Montant du capital social : 2600 Euros <br>
+
+                    Adresse du siège social : 523 rue augustin Thierry 37400 Amboise <br>
+
+                    Code APE 6201Z <br>
+
+                    RCS Tours : 80874686100018 <br>
+
+                    Numéro de téléphone : 02 46 65 09 40 <br>
+
+                    Courriel : contact@idtpe.fr <br>
+
+                    Hébergeur : OVH <br>
+
+                    SAS au capital de 10 069 020 € <br>
+
+                    RCS Lille Métropole 424 761 419 00045 <br>
+
+                    Code APE 2620Z <br>
+
+                    Siège social : 2 rue Kellermann - 59100 Roubaix - France <br>
+                </p>        
+            </div>
+            <div class="card-footer">
+                <a href="{{path('account_login')}}" class="btn action_button ">Retour a l'accueil</a> 
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

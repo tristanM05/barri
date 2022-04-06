@@ -1,0 +1,31 @@
+{% extends 'Admin/base_admin.html.twig' %}
+
+{% block title %}Gestion F.A.Q{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="title text-center mt-3 mb-3">Gestion de la F.A.Q</h1>
+        {# DISPLAYS THE FLASH MESSAGES #}
+        {% include "Partials/flash_message.html.twig" %}
+        {# END DISPLAYS THE FLASH MESSAGES #}
+        <a href="{{path('createFaq')}}" class="btn btn-success mb-2">Ajoutez</a>
+            {% for f in faq %}
+                <div class="d-flex pb-3">
+                    <div class="divFaq shadow">
+                        <p class="p-2 question mt-2">{{f.question}}</p>
+                        <div class="p-2">
+                            <form method="POST" style="display:inline-block" action="{{path('supFaq',{'id':f.id})}}" onsubmit="return confirm('Confirmer la suppression)">
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ f.id)}}">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </form>
+                            <a href="{{path('modifFaq', {'id':f.id})}}" class="btn btn-info p-2"><i class="fas fa-pen-square"></i></a>
+                        </div>
+                    </div>
+                    <div class="divFaq2 shadow">
+                        <p class="response mt-0" style="width:700px">{{f.response|raw}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+    {% extends 'base.html.twig' %}
+
+{% block title %}F.A.Q{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <h1 class="title text-center my-5 text-uppercase">Foire au questions</h1>
+        <div id="js-faq">
+            <a href="{{path('account_login')}}" class="btn action_button mb-3">Revenir a l'accueil</a>
+            {% for f in faq %}
+                <div class="card faq shadow js-item">
+                    <div class="card-header">
+                        <p class="faqQuestion">{{f.question}}</p>   
+                    </div>
+                    <div class="card-body p-2">
+                        <p class="response">{{f.response|raw}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+

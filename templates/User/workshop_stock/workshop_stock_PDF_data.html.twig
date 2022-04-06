@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <title>Liste des articles</title>
+        <title>Fiche inventaire</title>
     </head>
     <body>
         <div>
@@ -12,7 +12,8 @@
         </div>
         <div class="container pb-5">
             <div class="row">
-                <div class="col-12 text-center"><h2>Edité par : {{app.user.firstname}} {{app.user.lastname}} le {{date | date('d/m/Y')}}</h2> </div>
+                <div class="col-12 text-center"><h2>Fiche inventaire édité le: {{date | date('d/m/Y')}}</h2> </div>
+                {# <div class="col-12 text-center"><h2>Edité par : {{app.user.firstname}} {{app.user.lastname}} le {{date | date('d/m/Y')}}</h2> </div> #}
             </div>
         </div>
         <table class="table text-center border">
@@ -20,34 +21,48 @@
                 <tr>
                     <th scope="col-2" colspan="2">Numéro</th>
                     <th scope="col-2" colspan="2">Designation</th>
-                    <th scope="col-2" colspan="2">Description</th>
-                    <th scope="col-2" colspan="2">Coût de revient</th>
                     <th scope="col-2" colspan="2">Prix de référence</th>
-                    <th scope="col-2" colspan="2">Prix spécial</th>
                     <th scope="col-2" colspan="2">Date de production</th>
-                    <th scope="col-2" colspan="2">Date de sortie</th>
+                    <th scope="col-2" colspan="2">Lot</th>
+                    <th scope="col-2" colspan="2">Quantité</th>
+                    <th scope="col-2" colspan="2">Date d'expiration</th>
+                    <th scope="col-2" colspan="2">Conforme</th>
+                    <th scope="col-2" colspan="2">Remarque</th>
                 </tr>
             </thead>
             <tbody class="js-filter-content">
-            
-                {% for article in articles %}
+                {% for lot in lots %}
+                    <tr class="border">
+                        <td colspan="2">{{lot.article.number}}</td>
+                        <td colspan="2">{{lot.article.designation}}</td>
+                        <td colspan="2">{{lot.article.referenceprice}} &euro;</td>
+                        <td colspan="2">{{lot.dateEnter | date('d/m/y') }}</td>
+                        <td colspan="2">{{lot.number}}</td>   
+                        <td colspan="2">{{lot.quantity}}</td>
+                        {% if lot.dateExp != null %}    
+                            <td colspan="2">{{lot.dateExp | date('d/m/y') }}</td>
+                        {% else %}
+                            <td colspan="2">/</td>
+                        {% endif %}
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                {% endfor %}
+                {% for article in articles %}   
                     <tr class="border">
                         <td colspan="2">{{article.number}}</td>
                         <td colspan="2">{{article.designation}}</td>
-                        {% if article.describing | length >= 30 %}
-                            <td colspan="2">{{article.describing|slice(0,30)}}...</td>
+                        <td colspan="2">{{article.referenceprice}} &euro;</td>
+                        <td colspan="2">{{article.productiondate | date('d/m/y') }}</td>
+                        <td colspan="2">/</td>   
+                        <td colspan="2">{{article.quantity}}</td>
+                        {% if article.endDate != null %}    
+                            <td colspan="2">{{article.endDate | date('d/m/y') }}</td>
                         {% else %}
-                            <td colspan="2">{{article.describing}}</td>
+                            <td colspan="2">/</td>
                         {% endif %}
-                        <td colspan="2">{{article.costprice}}</td>
-                        <td colspan="2">{{article.referenceprice}}</td>
-                        <td colspan="2">{{article.specialprice}}</td>
-                        <td colspan="2">{{article.productiondate | date('d-m-y') }}</td>
-                        {% if article.leftdate == null %}
-                            <td colspan="2"></td>
-                        {% else %}
-                            <td colspan="2">{{article.leftdate | date('d-m-y')}}</td>
-                        {% endif %}
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
                     </tr>
                 {% endfor %}
             </tbody>

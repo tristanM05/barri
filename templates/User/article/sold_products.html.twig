@@ -28,6 +28,8 @@
             {% for article in products %}
             <input type="hidden" name="keepSpecialPrice{{article.id}}" id="keepSpecialPrice{{article.id}}"
               value="{{article.specialPrice}}">
+            <input type="hidden" name="keepQuantity{{article.id}}" id="keepQuantity{{article.id}}"
+              value="{{article.quantity}}">
             {% endfor %}
           </div>
 

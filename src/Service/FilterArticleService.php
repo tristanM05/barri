@@ -9,8 +9,9 @@ use Symfony\Component\Validator\Constraints\DateTime;
 
 class FilterArticleService{
 
-    // public function __construct($time = 'now', ?DateTimeZone $now = null) {
-    //     $this->time = $time;
+    // public function __construct() {
+    //     $now = new \DateTime('now');
+    //     $now->setTime(0,0,0);
     // }
 
     /**
@@ -51,7 +52,7 @@ class FilterArticleService{
     // /**
     //  * @var Date
     //  */
-    // public $expired = 'now';
+    // public $expired = new \DateTime('now');
 
 
 }

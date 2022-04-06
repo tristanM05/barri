@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Family;
 use App\Entity\Article;
+use App\Entity\Journal;
 use App\Entity\Salepoint;
 use App\Entity\Subfamily;
 use App\Form\ResetPassType;
@@ -18,6 +19,7 @@ use App\Repository\SalepointRepository;
 use App\Repository\SubfamilyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ProductStatusRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -178,7 +180,15 @@ class SecurityController extends AbstractController
             $mailer->send($message3);
 
             // Send a message
-            $this->addFlash('success', 'Merci de votre inscription, vous allez recevoir un mail pour valider votre compte');
+            $this->addFlash('success', 
+            'Bienvenue;
+            Vous venez de créer votre espace pour accéder aux fonctionnalités de BARRI,  assistant digital de gestion.
+            Un mail d’activation de votre compte vient de vous êtes envoyé ; il vous permettra de découvrir gratuitement l’ergonomie et les principales fonctionnalités de cet outil.
+            Si vous n’avez pas reçu le mail d’activation, vérifiez qu’il ne figure pas dans vos spams. 
+            N’hésitez pas à contacter notre équipe si vous rencontrez une quelconque difficulté. L’assistance personnalisée est au centre de toutes nos actions.
+            sdurin@idtpe.fr 07 66 58 02 67
+            '
+        );
 
             return $this->redirectToRoute("account_login");
         }
@@ -259,7 +269,9 @@ class SecurityController extends AbstractController
                     ->setSalepoint($sale)
                     ->setProductStatus($product_status)
                     ->setSubfamily($sub)
-                    ->setIsvisible(1);
+                    ->setIsvisible(1)
+                    ->setQuantity(1)
+                    ->setTotalPrice(15*1);
         $entityManager->persist($demoArticle);
         $demoArticle2 = new Article();
         $demoArticle2->setNumber(002)
@@ -270,7 +282,9 @@ class SecurityController extends AbstractController
                     ->setSalepoint($sale)
                     ->setProductStatus($product_status)
                     ->setSubfamily($sub)
-                    ->setIsvisible(1);
+                    ->setIsvisible(1)
+                    ->setQuantity(1)
+                    ->setTotalPrice(15*1);
         $entityManager->persist($demoArticle2);
         $demoArticle3 = new Article();
         $demoArticle3->setNumber(003)
@@ -281,7 +295,9 @@ class SecurityController extends AbstractController
                     ->setSalepoint($sale)
                     ->setProductStatus($product_status)
                     ->setSubfamily($sub)
-                    ->setIsvisible(1);
+                    ->setIsvisible(1)
+                    ->setQuantity(1)
+                    ->setTotalPrice(15*1);
         $entityManager->persist($demoArticle3);
         $demoArticle4 = new Article();
         $demoArticle4->setNumber(004)
@@ -292,7 +308,9 @@ class SecurityController extends AbstractController
                     ->setSalepoint($sale)
                     ->setProductStatus($product_status)
                     ->setSubfamily($sub)
-                    ->setIsvisible(1);
+                    ->setIsvisible(1)
+                    ->setQuantity(1)
+                    ->setTotalPrice(15*1);
         $entityManager->persist($demoArticle4);
         $demoArticle5 = new Article();
         $demoArticle5->setNumber(005)
@@ -303,8 +321,23 @@ class SecurityController extends AbstractController
                     ->setSalepoint($sale)
                     ->setProductStatus($product_status)
                     ->setSubfamily($sub)
-                    ->setIsvisible(1);
+                    ->setIsvisible(1)
+                    ->setQuantity(1)
+                    ->setTotalPrice(15*1);
         $entityManager->persist($demoArticle5);
+        $entityManager->flush();
+
+        //create new journal
+        $journal = new Journal();
+        $journal->setDate($now);
+        $journal->setClient($client);
+        $journal->setTotalStart(0.00);
+        $journal->setTotalEspStart(0.00);
+        $journal->setTotalCb(0.00);
+        $journal->setTotalEsp(0.00);
+        $journal->setTotalChq(0.00);
+        $journal->setTotalOther(0.00);
+        $entityManager->persist($journal);
         $entityManager->flush();
 
 

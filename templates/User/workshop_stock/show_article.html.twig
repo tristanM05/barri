@@ -1,6 +1,6 @@
 {% extends 'User/base_user.html.twig' %}
 
-{% block title %}article: {{article.designation}}{% endblock %}
+{% block title %}produit: {{article.designation}}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
@@ -15,82 +15,145 @@
             {# CHECK IF IT IS THE CUSTOMER'S ITEM #}
                 {% if app.user == article.client %}
                     <div class="justify-content-center pb-4 mt-5">
-                        <a href="{{path('user_workshop_stock')}}" class="btn action_button mr-3"><i class="fas fa-arrow-left"></i> Retour aux articles</a>
+                        <a href="{{path('user_workshop_stock')}}" class="btn action_button mr-3"><i class="fas fa-arrow-left"></i> Retour aux produits</a>
                         <a href="{{path('user_article_edit', {'id': article.id})}}" class="btn action_button"><i class="fas fa-edit"></i> Modifier</a>
                     </div>
-                    <h1 class="title mb-4">Affichage de l'article :<span class="text-uppercase"> {{article.designation}}</span></h1>
+                    <h1 class="title mb-4">Information sur le produit :<span class="text-uppercase"> {{article.designation}}</span></h1>
                     {% include "Partials/flash_message.html.twig" %}
 
                 
                     <div class="row pb-5">
                         <div class="col-6 border showArticle">
-                            <div class="form-group">
-                                <label><strong>Numéro d'identification :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Numéro d'identification :</strong></label>
                                 <p>{{article.number}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Designation :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Designation :</strong></label>
                                 <p>{{article.designation}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Description :</strong></label>
+                            <div class="">
+                                <label class=""><strong>Description :</strong></label>
                                 <p>{{article.describing}}</p>
                             </div>
                         </div>
 
                         <div class="col-6 border showArticle">
-                            <div class="form-group">
-                                <label><strong>Prix de vente de référence :</strong></label>
-                                <p>{{article.referenceprice}}</p>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Prix de vente de référence :</strong></label>
+                                <p>{{article.referenceprice}} &euro;</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Prix spécial :</strong></label>
-                                <p>{{article.specialprice}}</p>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Prix spécial :</strong></label>
+                                {% if article.specialprice == null %}
+                                    <p>Indéfini</p>
+                                {% else %}
+                                    <p>{{article.specialprice}}</p>
+                                {% endif %}
                             </div>
-                            <div class="form-group">
-                                <label><strong>Coût de revient ou prix d'achat :</strong></label>
-                                <p>{{article.costprice}}</p>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Coût de revient ou prix d'achat :</strong></label>
+                                {% if article.costprice == null %}
+                                    <p>Indéfini</p>
+                                {% else %}
+                                    <p>{{article.costprice}} &euro;</p>
+                                {% endif %}
+                            </div>
+                            <div class="showItem">
+                                <div class="showItem">
+                                    <label class="labelItem"><strong>Quantié :</strong></label>
+                                    <p>{{article.quantity}}</p>
+                                </div>
+                                <div class="ml-5 showItem">
+                                    <label class="labelItem"><strong>Pour un total de :</strong></label>
+                                    <p>{{article.totalPrice}} &euro;</p>
+                                </div>
+                            </div>
+                            <div class="showItem">
+                                <div class="showItem">
+                                    <label class="labelItem"><strong>Catégorie :</strong></label>
+                                    {% if article.category == null %}
+                                        <p>Non renseigné</p>
+                                    {% else %}
+                                        <p>{{article.category.name}}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="ml-5 showItem">
+                                    <label class="labelItem"><strong>Origine :</strong></label>
+                                    {% if article.fournisseur == null %}
+                                        <p>Non renseigné</p>
+                                    {% else %}
+                                        <p>{{article.fournisseur.name}}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
 
                         <div class="col-6 border showArticle">
-                            <div class="form-group">
-                                <label><strong>Date de production :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Date de production :</strong></label>
                                 <p>{{article.productiondate | frenchdate}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Date de sortie :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Date d'expiration :</strong></label>
+                                {% if article.endDate %}
+                                    <p>{{article.endDate | frenchdate}}</p>
+                                {% else %}
+                                    <p>Aucune date renseigné</p>
+                                {% endif %}
+                            </div>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Date d'alerte :</strong></label>
+                                {% if article.dateLimit %}
+                                    <p>{{article.alertDate | frenchdate}}</p>
+                                {% else %}
+                                    <p>Aucune date renseigné</p>
+                                {% endif %}
+                            </div>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Date de sortie :</strong></label>
                                 <p>
                                     {% if article.leftdate %}
                                         {# {{article.leftdate | date('j F Y')}} #}
                                         {{article.leftdate | frenchdate}}
                                     {% else %}
-                                        <p>Article encore en vente</p>
+                                        <p>Produit encore en vente</p>
                                     {% endif %}
                                 </p>
                             </div>
                         </div>
 
                         <div class="col-6 border showArticle">
-                            <div class="form-group">
-                                <label><strong>Point de vente :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Point de vente :</strong></label>
                                 <p>{{article.salepoint.wording}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Catégories d'articles :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Catégories d'articles :</strong></label>
                                 <p>{{article.subfamily.wording}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Statut du produit :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Statut du produit :</strong></label>
                                 <p>{{article.productstatus.wording}}</p>
                             </div>
-                            <div class="form-group">
-                                <label><strong>Visible ? :</strong></label>
+                            <div class="showItem">
+                                <label class="labelItem"><strong>Visible ? :</strong></label>
                                 {% if article.isvisible %}
                                     <p>Oui</p>
                                 {% else %}
                                     <p>Non</p> 
                                 {% endif %}
+                            </div>
+                        </div>
+                        <div class="card mt-4 col-12">
+                            <h5 class="title card-header">Image(s) liées à ce produit:</h5>
+                                <div class="row p-3">
+                                {% for image in article.images %}
+                                    <div class="mb-3 col-2">
+                                        <img class="imgPrev" src="{{ asset('uploads/' ~ image.name)}}" alt="image-{{image.id}}"
+                                            width="160" height="170">
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                         

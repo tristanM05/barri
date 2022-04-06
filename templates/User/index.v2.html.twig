@@ -1,19 +1,12 @@
 {% extends "User/base_user_home.html.twig" %}
 
-{% block title %}Acceuil{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
     <div class="container py-5 ">
         <div class="row p-0 text-center {% if app.user.ispremium %}index_client{% endif %}">
 
             <div class="">
-
-                {# {% if not app.user.ispremium %}
-                    <div class="alert-no-premium mb-5 not_premium">
-                        <h2 class="py-2 text-light">Votre compte est en lecture seule, <a href="{{ path('user_subscription') }}" class="link-alert-no-premium">cliquez-ici</a> pour le modifier</h2>
-                    </div>
-                {% endif %} #}
-
                 <div class="">
                     <div class="divHome2" onMouseOver="displayDivInfo('Permet de gérer vos articles');" onMouseOut="displayDivInfo()">
                         <a href="{{ path('user_workshop_stock') }}">
@@ -38,21 +31,29 @@
                         </a>
                     </div>
 
-                    <div class="divHome5" onMouseOver="displayDivInfo('Le barri\'shop est ouvert !');" onMouseOut="displayDivInfo()">
-                        <a href="{{ path('user_outside_sale') }}">
-                            <img src="{{asset('build/data/shop.png')}}" class="img-fluid itemhome" alt="">
-                        </a>
+                        {% if not app.user.isPremium %}
+                            <div class="divHome5" onMouseOver="displayDivInfo('Shop accessible uniquement avec un compte premium');" onMouseOut="displayDivInfo()">
+                                <img src="{{asset('build/data/shop.png')}}" class="img-fluid itemhome" alt="">
+                        {% else %}
+                            <div class="divHome5" onMouseOver="displayDivInfo('Le barri\'shop est ouvert !');" onMouseOut="displayDivInfo()">
+                            <a href="{{ path('user_outside_sale') }}">
+                                <img src="{{asset('build/data/shop.png')}}" class="img-fluid itemhome" alt="">
+                            </a>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </div>
-
-                <img src="{{asset('build/data/circle1.png')}}" id="circle" class="img-fluid" alt="logo barri navbar" style="width:45%">
-                {# <img src="{{asset('build/data/logo1st.png')}}" class="img-fluid" alt="logo barri navbar" style="width:25%"> #}
-
-
+            <img src="{{asset('build/data/circle1.png')}}" id="circle" class="img-fluid" alt="logo barri navbar" style="width:45%">
+            {# <img src="{{asset('build/data/logo1st.png')}}" class="img-fluid" alt="logo barri navbar" style="width:25%"> #}
         </div>
     </div>
-    
+    {% if not app.user.ispremium %}
+        {# <div class="alert-no-premium mb-5 not_premium"> #}
+            {# <h2 class="py-2 text-light">Votre compte est en lecture seule, <a href="{{ path('user_subscription') }class="link-alert-no-premium">cliquez-ici</a> pour le modifier</h2>
+        </div> #}
+        {% include "User/partials/_modalBasic.html.twig" %}
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -80,5 +81,8 @@
                 document.body.removeChild(document.getElementById('divInfo'));
             }
         }
+</script>
+<script>
+    $('#modalBasic').modal('show');
 </script>
 {% endblock %}

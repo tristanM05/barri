@@ -4,92 +4,111 @@
 
 {% block body %}
 
-    <div class="container pb-5">
+<div class="container pb-5">
     <div class="text-center">
-                <img class="TitleBan" src="{{asset('build/data/gesttitle.png')}}" alt="">
-            </div>
-        <div class="row">
-            <div class="col-8 offset-2">
-                {# DISPLAYS THE FLASH MESSAGES #}
-                    {% include "Partials/flash_message.html.twig" %}
-                {# END DISPLAYS THE FLASH MESSAGES #}
-            </div>
-            
-            <div class="row position-relative" style="width:100%;">
-
-                    <img src="{{asset('build/data/jauge.png')}}" class="img-fluid" alt="Logo Barri management">
-                    <div class="col-8 d-inline-flex p-0 div_right_Barri">
-                        <div class="col-12 text-center div2">
-                            <p class="p_in_div_management">
-                                Votre chiffre d'affaires au cours des 12 derniers mois est de : 
-                                <strong>{{totalRevenue}} €</strong>
-                            </p>
-                            <p class="p_in_div_management">
-                                Vous avez vendu <strong>{{countArticle}}</strong> produits au cours des 12 derniers mois.
-                            </p>
-                        </div>
-                    </div>
-                {# {% include "User/management/_management_form.html.twig" %} #}
-                <div class="imgbarri">
-                    <div class="row">
-                        <div class="col-4">
-                            <img src="{{asset('build/data/gp3.png')}}" class="img-fluid" alt="">
-                        </div>
-                        <div class="col-4">
-                            <img src="{{asset('build/data/gp2.png')}}" class="img-fluid" alt="">
-                        </div>
-                        <div class="col-4">
-                            <img src="{{asset('build/data/gp1.png')}}" class="img-fluid" alt="">
-                        </div>
-                    </div>
-                    {{form_start(form)}}
-                        
-                        
-                        <div class="row mt-1">
-                            <div class="gradiant_content">
-                                <p>Articles Super Top vendus en <i class="fas fa-minus"></i> de {{form_widget(form.maxsupertop, {attr: {style: 'width:12%'}} )}} mois</p>
-                            </div>
-
-                            <div class="gradiant_content">
-                                <p>Articles Top vendus en <i class="fas fa-minus"></i> de {{form_widget(form.maxtop, {attr: {style: 'width:12%', onkeyup: 'editNotTopPrice()'}})}} mois</p>
-                            </div>
-                            <div class="gradiant_content">
-                                <p>Articles Pas Top vendus <i class="fas fa-plus"></i> de 
-                                    <input type="text" class="d-inline h2 form-control" value="{{app.user.client.maxtop}}" style="width: 12%" disabled id="notTop"> mois
-                                </p>
-                            </div>   
-                        </div>
-
-                        <div class="pt-2 justify-content-end d-flex mr-5 ">
-                            <button type="submit" class="btn action_button">Valider</button> 
-                        </div>
-
-                        
-                        
-                    {{form_end(form)}}
-                </div>
-                
-            </div>
-
-            <div class="row" style="width:100%">
-                {% include "User/management/_management_article.html.twig" %}
-            </div>
-            
-
-            
+        <img class="TitleBan" src="{{asset('build/data/gesttitle.png')}}" alt="">
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2">
+            {# DISPLAYS THE FLASH MESSAGES #}
+            {% include "Partials/flash_message.html.twig" %}
+            {# END DISPLAYS THE FLASH MESSAGES #}
         </div>
 
-        {% include "User/workshop_stock/partials/_modal_graph_count_stock.html.twig" %}
-        {% include "User/workshop_stock/partials/_modal_graph_quantity_stock.html.twig" %}
+        <div class="row position-relative" style="width:100%;">
+
+            <img src="{{asset('build/data/jauge.png')}}" class="img-fluid" alt="Logo Barri management">
+            <div class="col-8 d-inline-flex p-0 div_right_Barri">
+                <div class="col-12 text-center div2">
+                    <p class="p_in_div_management">
+                        Votre chiffre d'affaires au cours des 12 derniers mois est de :
+                        {% if allSoldArticle['soldArticle'].0['SUM'] %}
+                        <strong>{{allSoldArticle['soldArticle'].0['SUM']|number_format(2, '.',' ')}} &euro;</strong>
+                        {% else %}
+                        0 &euro;
+                        {% endif %}
+
+                    </p>
+                    <p class="p_in_div_management">
+                        Vous avez vendu <strong>
+                            {% if allSoldArticle['soldArticle'].0['COUNT'] %}
+                            {{allSoldArticle['soldArticle'].0['COUNT']}}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </strong> produits au cours des 12 derniers mois.
+                    </p>
+                    <button type="button" class="btn action_button" data-toggle="modal" data-target="#modalVente">
+                        Historique des ventes
+                    </button>
+                </div>
+            </div>
+            {# {% include "User/management/_management_form.html.twig" %} #}
+            <div class="imgbarri">
+                <div class="row">
+                    <div class="col-4">
+                        <img src="{{asset('build/data/gp3.png')}}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-4">
+                        <img src="{{asset('build/data/gp2.png')}}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-4">
+                        <img src="{{asset('build/data/gp1.png')}}" class="img-fluid" alt="">
+                    </div>
+                </div>
+                {{form_start(form)}}
+
+
+                <div class="row mt-1">
+                    <div class="gradiant_content">
+                        <p>Articles Super Top vendus en <i class="fas fa-minus"></i> de
+                            {{form_widget(form.maxsupertop, {attr: {style: 'width:12%'}} )}} mois</p>
+                    </div>
+
+                    <div class="gradiant_content">
+                        <p>Articles Top vendus en <i class="fas fa-minus"></i> de
+                            {{form_widget(form.maxtop, {attr: {style: 'width:12%', onkeyup: 'editNotTopPrice()'}})}}
+                            mois</p>
+                    </div>
+                    <div class="gradiant_content">
+                        <p>Articles Pas Top vendus <i class="fas fa-plus"></i> de
+                            <input type="text" class="d-inline h2 form-control" value="{{app.user.client.maxtop}}"
+                                style="width: 12%" disabled id="notTop"> mois
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-2 justify-content-end d-flex mr-5 ">
+                    <button type="submit" class="btn action_button">Valider</button>
+                </div>
+
+
+
+                {{form_end(form)}}
+            </div>
+
+        </div>
+
+        <div class="row" style="width:100%">
+            {% include "User/management/_management_article.html.twig" %}
+        </div>
+
+
+
     </div>
+
+    {% include "User/workshop_stock/partials/_modal_graph_count_stock.html.twig" %}
+    {% include "User/workshop_stock/partials/_modal_graph_quantity_stock.html.twig" %}
+    {% include "User/management/partials/_modalVente.html.twig" %}
+</div>
 
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        function editNotTopPrice(){
-            price_value = document.getElementById("user_configuration_maxtop").value;
-            document.getElementById("notTop").value = price_value;
-        };
-    </script>
+<script>
+    function editNotTopPrice() {
+        price_value = document.getElementById("user_configuration_maxtop").value;
+        document.getElementById("notTop").value = price_value;
+    };
+</script>
 {% endblock %}

@@ -48,15 +48,17 @@
                 </div>
             </div>
             <div id="video">
-                <a href="https://www.youtube.com/watch?v=WT22ULaTwVI&feature=youtu.be" target="blank"><img src="{{ asset('build/data/VIDEO.png') }}" alt="Login_image" class="img-fluid imgVideo"></a>
+                <a href="https://youtu.be/W6YFLg3cuGU" target="blank"><img src="{{ asset('build/data/VIDEO.png') }}" alt="Login_image" class="img-fluid imgVideo"></a>
             </div>
             <div class="d-flex">
-                <div class="py-4 px-4" id="infoLog">
+                <div class="py-4 px-4 mb-2" id="infoLog">
                     <p id="titleLog"><span>comment fonctionne </span>barri&reg ?</p>
                     <hr id="hrPhone">
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-12">
-                            <img src="{{ asset('build/data/log1.png') }}" alt="Login_image" class="img-fluid log1" style="width: 80%">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('build/data/log1.png') }}" alt="Login_image" class="img-fluid log1" style="width: 80%">  
+                            </div>
                             <p class="plog">
                                 <span class="lognum py-1 px-2">1</span> Je créé mon compte et choisis ma formule
                             </p>
@@ -65,7 +67,9 @@
                             </p>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12">
-                            <img src="{{ asset('build/data/log2.png') }}" alt="Login_image" class="img-fluid log2" style="width: 60%">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('build/data/log2.png') }}" alt="Login_image" class="img-fluid log2" style="width: 60%">
+                            </div>
                             <p class="plog">
                                 <span class="lognum py-1 px-2">2</span> Je reçois mes étiquettes et ma <br> douchette
                             </p>
@@ -74,7 +78,9 @@
                             </p>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12">
-                            <img src="{{ asset('build/data/log3.png') }}" alt="Login_image" class="img-fluid log3" style="width: 60%">
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('build/data/log3.png') }}" alt="Login_image" class="img-fluid log3" style="width: 60%">  
+                            </div>
                             <p class="plog">
                                 <span class="lognum py-1 px-2">3</span> <span class="text-uppercase">barri&reg</span> m'informe de la situation
                             </p>
@@ -92,10 +98,19 @@
                 </div>
             </div>
         </div>
+        <div class="text-center">
+                <a href="{{path('faq')}}">Accedez à la foire aux questions</a>
+        </div>
 
         {% include "Security/Partials/_register.html.twig" %}
         {% include "Security/Partials/_login.html.twig" %}
-        
+    </div>
+    <div id="footer">
+        <div id="divFoot">
+            <a href="{{path('mentions')}}">Mentions légales</a>
+            <p>Copyright&copy;IDTPE 2020</p>
+            <p class="ml-3">Version: 1.0</p>
+        </div>
     </div>
 {% endblock %}
 {% block javascripts %}

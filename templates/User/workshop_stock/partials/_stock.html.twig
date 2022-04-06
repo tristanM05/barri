@@ -1,0 +1,40 @@
+<div class="modal fade bd-example-modal-xl" tabindex="-1" id="modalStock" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dna" role="document" style="width:100%">
+        <div class="modal-content text-center justify-content-center">
+            <div class="modal-header d-flex">
+                <h5 class="modal-title title" id="exampleModalCenterTitle">Produit(s) avec stock bas </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body justify-content-center">
+                <table class="table text-center border" style="width:100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Code</th>
+                            <th>Stock actuelle</th>
+                            <th>niveau d'alerte</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in alertStock %}
+                        <tr onclick="document.location='{{path('user_article_show', {'id': a.id})}}' "
+                            class="view_article test">
+                            <td><strong>{{a.designation}}</strong></td>
+                            <td>{{a.number}}</td>
+                            <td>{{a.quantity}}</td>
+                            <td>{{a.alertStock}}</td>
+                            <td>
+                                <a href="{{path('user_article_edit', {'id': a.id})}}" class="btn action_button"><i class="fas fa-edit"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

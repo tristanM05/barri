@@ -3,10 +3,14 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Category;
+use App\Entity\Fournisseur;
 use App\Entity\Salepoint;
 use App\Entity\Subfamily;
 use App\Entity\ProductStatus;
 use Doctrine\ORM\EntityRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\FournisseurRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,9 +20,10 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 class ArticleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options){
@@ -70,6 +75,9 @@ class ArticleType extends AbstractType
             ])
             ->add('specialprice', NumberType::class, [
                 'label' => "Prix spécial (€)",
+                'attr' => [
+                    'style' => 'width: 243px'
+                ],
                 'required' => false,
             ])
             ->add('productiondate',DateType::class,[
@@ -82,6 +90,14 @@ class ArticleType extends AbstractType
                 "widget" => "single_text",
                 "required" => false
             ])
+            // ->add('lots', CollectionType::class, [
+            //     'entry_type' => LotsType::class,
+            //     'entry_options' => [
+            //         'label' => false
+            //     ],
+            //     'allow_add' => true,
+            //     'by_reference' => false,
+            // ])
             // ->add('salepoint', EntityType::class,[
             //     'label' => "Point de vente",
             //     'class' => Salepoint::class,
@@ -119,10 +135,62 @@ class ArticleType extends AbstractType
                 "widget" => "single_text",
                 'required' => false,
             ])
-            ->add('dateLimit', DateType::class, [
+            ->add('dateLimit', IntegerType::class, [
                 'label' => false,
-                "widget" => "single_text",
+                'attr' => [
+                    'style' => 'width: 60px'
+                ],
                 'required' => false,
+            ])
+            ->add('quantity', IntegerType::class, [
+                'label' => "Quantité",
+                'required' => false,
+                
+            ])
+            ->add('category', EntityType::class,[
+                'label' => false,
+                'required' => false,
+                'class' => Category::class,
+                'choice_label' => 'getName',
+                'empty_data' => null,
+                'placeholder' => '-- Catégorie éxistante --',
+                'attr' => [
+                    'style' => 'width: 200px',
+                ],
+                'query_builder' => function(CategoryRepository $c) use ($client)
+                                    {
+                                        return $c ->createQueryBuilder('c')
+                                                    ->where('c.client = :v1')
+                                                    ->setParameter('v1', $client)
+                                                    ;
+                                    }
+                
+            ])
+            ->add('fournisseur', EntityType::class,[
+                'label' => false,
+                'required' => false,
+                'class' => Fournisseur::class,
+                'choice_label' => 'getName',
+                'empty_data' => null,
+                'placeholder' => '-- Origine éxistante --',
+                'attr' => [
+                    'style' => 'width: 200px'
+                ],
+                'query_builder' => function(FournisseurRepository $f) use ($client)
+                                    {
+                                        return $f ->createQueryBuilder('c')
+                                                    ->where('c.client = :v1')
+                                                    ->setParameter('v1', $client)
+                                                    ;
+                                    }
+                
+            ])
+            ->add('alert_stock', IntegerType::class,[
+                "label" => false,
+                'required' => false,
+                "attr" => [
+                    "placeholder" => "Définir une alerte stock"
+                ]
             ])
         ;
     }

@@ -24,12 +24,12 @@ class DashboardAdminService{
     }
 
     public function getCountItems(){
-        return $this->manager->createQuery("SELECT count(a) as countItems from App\Entity\Article a")
+        return $this->manager->createQuery("SELECT sum(a.quantity) as countItems from App\Entity\Article a")
             ->getResult();
     }
 
     public function getCountStock(){
-        return $this->manager->createQuery('SELECT sum(a.referenceprice) as SUM from App\Entity\Article a join a.productStatus p where p.wording = ?1')
+        return $this->manager->createQuery('SELECT sum(a.totalPrice) as SUM from App\Entity\Article a join a.productStatus p where p.wording = ?1')
             ->setParameter(1,'en vente')
             ->getResult();
     }
@@ -42,13 +42,13 @@ class DashboardAdminService{
     }
 
     public function getCountItemByUser($id){
-        return $this->manager->createQuery("SELECT count(a) as countItems from App\Entity\Article a join a.client c where c.id = ?1")
+        return $this->manager->createQuery("SELECT sum(a.quantity) as countItems from App\Entity\Article a join a.client c where c.id = ?1")
             ->setParameter(1, $id)
             ->getResult();
     }
 
     public function getValueStock($id){
-        return $this->manager->createQuery("SELECT sum(a.referenceprice) as val from App\Entity\Article a join a.client c join a.productStatus p where c.id = ?1 and p.wording = ?2")
+        return $this->manager->createQuery("SELECT sum(a.totalPrice) as val from App\Entity\Article a join a.client c join a.productStatus p where c.id = ?1 and p.wording = ?2")
             ->setParameter(1, $id)
             ->setParameter(2, 'en vente')
             ->getResult();

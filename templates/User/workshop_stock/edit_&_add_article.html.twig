@@ -2,11 +2,11 @@
 
 {% block title %}
 {% if isDuplicate %}
-Duplication d'un article :
+Duplication d'un produit :
 {% elseif isEdit %}
-Edition d'un article :
+Edition d'un produit :
 {% else %}
-Ajout d'un article :
+Ajout d'un produit :
 {% endif %}
 {% endblock %}
 
@@ -35,13 +35,15 @@ Ajout d'un article :
 
         {# ADAPTS THE TITLE ACCORDING TO THE ACTION #}
         {% if isDuplicate %}
-            <h1 style="width:100%;" class="title mb-4">Duplication de l'article : <strong>{{article.designation}}</strong></h1>
-            <br>
+        <h1 style="width:100%;" class="title mb-4">Duplication du produit :
+        </h1>
+        <br>
         {% elseif isEdit %}
-            <h1 style="width:100%;" class="title mb-4">Edition de l'article : <strong>{{article.designation}}</strong></h1><br>
+        <h1 style="width:100%;" class="title mb-4">Edition du produit :</h1>
+        <br>
 
         {% else %}
-            <h1 style="width:100%;" class="title mb-4">Ajout d'un article :</h1><br>
+        <h1 style="width:100%;" class="title mb-4">Ajout d'un produit :</h1><br>
         {% endif %}
         {# END ADAPTS THE TITLE ACCORDING TO THE ACTION #}
 
@@ -50,19 +52,19 @@ Ajout d'un article :
             <div class="col-lg-6">
                 {{form_start(form_article)}}
 
-                <div class="card mb-3" style="width: 33rem;">
+                <div class="card shadow mb-3" style="width: 33rem;">
                     <div class="card-body">
                         <h5 class="card-title title">Identification:</h5>
 
 
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         {% if article.productstatus != 'en vente' %}
-                            <label for="number">Numéro d'identification</label>
-                            <input type="text" class="form-control mb-4" value="{{article.number}}" name="number" disabled>
+                        <label for="number">Numéro d'identification</label>
+                        <input type="text" class="form-control mb-4" value="{{article.number}}" name="number" disabled>
                         {% elseif isDuplicate %}
-                            {{form_row(form_article.number,{'id':'scanner_input', attr:{value : ''}})}}
+                        {{form_row(form_article.number,{'id':'scanner_input', attr:{value : ''}})}}
                         {% else %}
-                            {{form_row(form_article.number,{'id':'scanner_input'})}}
+                        {{form_row(form_article.number,{'id':'scanner_input'})}}
                         {% endif %}
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
 
@@ -77,171 +79,257 @@ Ajout d'un article :
 
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         {% if article.productstatus != 'en vente' %}
-                            <label for="designation">Designation</label>
-                            <input type="text" class="form-control mb-4" value="{{article.designation}}" disabled
+                        <label for="designation">Designation</label>
+                        <input type="text" class="form-control mb-4" value="{{article.designation}}" disabled
                             name="designation">
                         {% else %}
-                            {{form_row(form_article.designation,{'id':'testFocus'})}}
+                        {{form_row(form_article.designation,{'id':'testFocus'})}}
                         {% endif %}
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
 
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         {% if article.productstatus != 'en vente' %}
-                            <label for="describing">Description</label>
-                            <textarea name="describing" cols="30" rows="4" class="form-control" disabled>{{article.describing}}</textarea>
+                        <label for="describing">Description</label>
+                        <textarea name="describing" cols="30" rows="4" class="form-control"
+                            disabled>{{article.describing}}</textarea>
                         {% else %}
-                            {{form_row(form_article.describing)}}
+                        {{form_row(form_article.describing)}}
+                        <div>
                             {{form_row(form_article.images)}}
+                        </div>
+                        <hr class="mt-4">
+                        <h5 class="card-title title mt-4">Categorie et origine</h5>
+                        <div class="d-flex">
+                            <div>
+                                <div class="d-flex">
+                                    <div>
+                                        <input type="text" name="category" id="category" class="form-control" placeholder="Nouvelle catégorie">
+                                    </div>
+                                    <div class="ml-1">
+                                        {{form_row(form_article.category)}}
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div>
+                                        <div class="d-flex">
+                                            <div>
+                                                <input type="text" name="fournisseur" id="fournisseur" class="form-control" placeholder="Nouvelle Origine">
+                                            </div>
+                                            <div class="ml-1">
+                                                {{form_row(form_article.fournisseur)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% endif %}
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-                            <h5 class="card-title title mt-4">Date de mise en stock:</h5>
+                        <h5 class="card-title title mt-4">Date de mise en stock:</h5>
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         {% if article.productstatus != 'en vente' %}
-                            <label for="productiondate">Date de production *</label>
-                            <input type="date" class="form-control mb-4" value="{{article.productiondate | date('Y-m-d')}}"
+                        <label for="productiondate">Date de production *</label>
+                        <input type="date" class="form-control mb-4" value="{{article.productiondate | date('Y-m-d')}}"
                             disabled name="productiondate">
                         {% elseif isEdit %}
-                            {{form_row(form_article.productiondate)}}
+                        {{form_row(form_article.productiondate)}}
                         {% else %}
-                            {{form_row(form_article.productiondate, {attr:{value : date}})}}
+                        {{form_row(form_article.productiondate, {attr:{value : date}})}}
                         {% endif %}
 
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-                        <h5 class="card-title title mt-4">Date d'expiration: <span id="optionDate">(optionel)</span></h5>
+                        <h5 class="card-title title mt-4">Date d'expiration: <span id="optionDate">(optionel)</span>
+                        </h5>
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         {% if article.productstatus != 'en vente' %}
-                            <input type="date" class="form-control mb-4" value="{{article.endDate | date('Y-m-d')}}"
+                        <input type="date" class="form-control mb-4" value="{{article.endDate | date('Y-m-d')}}"
                             disabled name="endDate">
                         {% else %}
-                            {{form_row(form_article.endDate)}}
-                            <p id="endDate" class="m-0 btn btn-block action_button">Définissez une alerte pour cette date</p>
-                            <div id="dateLimit">;  
-                                <div class="d-flex">
-                                    <h5 class="title">Date à laquelles vous souhaitez être alerté:</h5>
-                                    <p id="closeDate" class="btn action_button ml-2">X</p>
-                                </div>
+                        {{form_row(form_article.endDate)}}
+                        <p id="endDate" class="m-0 btn btn-block action_button">Définissez une alerte pour cette date
+                        </p>
+                        <div id="dateLimit">
+                            <div class="d-flex">
+                                <h5 class="title mr-2 mt-1">Etre averti</h5>
                                 {{form_row(form_article.dateLimit)}}
+                                <h5 class="title ml-2 mt-1"> jours avant.</h5>
+                                {# <p id="closeDate" class="btn action_button ml-2 mt-1">X</p> #}
                             </div>
+
+                        </div>
                         {% endif %}
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-
+                        
                     </div>
                 </div>
 
-                {% if isEdit %}
-                    <div class="card my-4">
-                        <h5 class="title card-header">Image(s) liées à cet article:</h5>
-                        <div class="p-3 row">
-                            {% for image in article.images %}
-                                <div class="col-6 mb-3">
-                                    <img class="imgPrev" src="{{ asset('uploads/' ~ image.name)}}" alt="image-{{image.id}}"
-                                        width="140" height="170">
-                                    <a class="delImg" href="{{ path('article_delete_image', {id: image.id}) }}" data-delete
-                                        data-token="{{ csrf_token('delete' ~ image.id) }}"><i class="fas fa-trash"></i></a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% else %}
-                {% endif %}
-
             </div>
 
-            <div class="col-lg-6 pl-5">
-                <div class="card" style="width: 33rem;">
+            <div class="col-lg-6 pl-3">
+                <div class="card shadow" style="width: 33rem;">
                     <div class="card-body">
-                        <h5 class="card-title title">Prix:</h5>
-                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-                        {% if article.productstatus != 'en vente' %}
-                            <label for="costprice">Coût de revient ou prix d'achat</label>
-                            <input type="text" class="form-control mb-4" value="{{article.costprice}}" disabled
-                            name="costprice">
-                        {% else %}
-                            {{form_row(form_article.costprice)}}
-                        {% endif %}
-                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        <h5 class="card-title title">Prix et quantité:</h5>
+                        <div class="d-flex">
+                            <div class="mr-3">
+                                {% if article.productstatus != 'en vente' %}
+                                <label for="costprice">Coût de revient ou prix d'achat</label>
+                                <input type="text" class="form-control mb-4" value="{{article.costprice}}" disabled
+                                    name="costprice">
+                                {% else %}
+                                {{form_row(form_article.costprice)}}
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if article.productstatus != 'en vente' %}
+                                <label for="referenceprice">Prix de vente de référence (€)</label>
+                                <input type="text" class="form-control mb-4" value="{{article.referenceprice}}" disabled
+                                    name="referenceprice">
+                                {% else %}
+                                {{form_row(form_article.referenceprice)}}
+                                {% endif %}
+                            </div>
+                        </div>
 
-                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-                        {% if article.productstatus != 'en vente' %}
-                            <label for="referenceprice">Prix de vente de référence (€)</label>
-                            <input type="text" class="form-control mb-4" value="{{article.referenceprice}}" disabled
-                            name="referenceprice">
-                        {% else %}
-                            {{form_row(form_article.referenceprice)}}
-                        {% endif %}
-                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-
-                        {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
-                        {% if article.productstatus != 'en vente' %}
-                            <label for="specialprice">Prix spécial (€)</label>
-                            <input type="text" class="form-control mb-4" value="{{article.specialprice}}" disabled
-                            name="specialprice">
-                        {% else %}
-                            {{form_row(form_article.specialprice)}}
-                        {% endif %}
-                        {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
+                        <div class="d-flex">
+                            <div class="mr-3">
+                                {% if article.productstatus != 'en vente' %}
+                                <label for="specialprice">Prix spécial (€)</label>
+                                <input type="text" class="form-control mb-4" value="{{article.specialprice}}" disabled
+                                    name="specialprice">
+                                {% else %}
+                                {{form_row(form_article.specialprice)}}
+                                {% endif %}
+                            </div>
+                            <div>
+                                {{form_row(form_article.quantity)}}
+                            </div>
+                        </div>
+                        <h5 class="card-title title mt-4">Définir une alerte stock <span id="optionDate">(optionel)</span></h5>
+                        <div>
+                            {{form_row(form_article.alert_stock)}}
+                        </div>
 
                         <hr class="mt-4">
 
                         <h5 class="card-title title">Stockage:</h5>
                         {{form_row(form_article.productStatus)}}
                         {% if article.isvisible %}
-                            {% set check = true %}
+                        {% set check = true %}
                         {% else %}
-                            {% set check = false %}
+                        {% set check = false %}
                         {% endif %}
                         {# CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
                         <h5 class="card-title title">Date de vente:</h5>
                         {{form_row(form_article.leftdate)}}
                         {% if article.productstatus != 'en vente' %}
-                            <input type="checkbox" checked="{{article.isvisible}}" disabled name="isvisible">
-                            <label for="specialprice">Produit visible</label>
+                        <input type="checkbox" checked="{{article.isvisible}}" disabled name="isvisible">
+                        <label for="specialprice">Produit visible</label>
                         {% else %}
-                            {{form_row(form_article.isvisible, {attr: {checked: 'checked'}})}}
+                        {{form_row(form_article.isvisible, {attr: {checked: 'checked'}})}}
                         {% endif %}
                         {# END CHECK IF THE PRODUCT STATUS IS != 'en vente' #}
 
+                        <p><strong><span id="star">(*)</span> Champs obligatoires</strong></p>
+                        <div class="text-center">
+                            {% if not isDuplicate and isEdit %}
+                            {# {{ not app.user.ispremium ? "disabled" }} #}
+                            <button type="submit" class="btn action_button" style="width:45%">Enregistrer</button>
+                            {% else %}
+                            <button type="submit" class="btn action_button" style="width:45%">Ajouter</button>
+                            {% endif %}
+                            <a href="{{path('user_workshop_stock')}}" class="btn action_button btnAnnuler" style="width:45%">Annuler</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="pt-3">
-                    <p>* Champs obligatoires</p>
-                    {% if not isDuplicate and isEdit %}
-                    {# {{ not app.user.ispremium ? "disabled" }} #}
-                        <button type="submit" class="btn action_button"
-                        style="width:45%">Enregistrer les modifications</button>
-                    {% else %}
-                        <button type="submit" class="btn action_button" 
-                        style="width:45%">Ajouter</button>
-                    {% endif %}
-
-
-                    <a href="{{path('user_workshop_stock')}}" class="btn action_button" style="width:45%">Annuler</a>
-                </div>
 
                 {% if article.productstatus != 'en vente' %}
-                    <div style="display:none;">
-                        {{form_widget(form_article)}}
-                    </div>
+                <div style="display:none;">
+                    {{form_widget(form_article)}}
+                </div>
                 {% endif %}
 
                 {{form_end(form_article)}}
             </div>
         </div>
         {% else %}
-            <p class="alert alert-danger">Cette page n'est pas disponible</p>
-            <a href="{{path('user_articles')}}">Revenir sur mes articles</a>
+        <p class="alert alert-danger">Cette page n'est pas disponible</p>
+        <a href="{{path('user_articles')}}">Revenir sur mes articles</a>
         {% endif %}
         {# CHECK IF IT IS INDEED THE CUSTOMER'S ITEM OR IF THE ROUTE ALLOWS TO ADD #}
     </div>
+    <div class="card shadow mr-5">
+        <div class="card-title d-flex">
+            <h5 class="title p-4 mb-0">Lots liés a cette article:</h5>
+            <i class="far fa-plus-square fa-2x plusLot mt-4" data-toggle="modal" data-target="#modalLots"></i>
+        </div>
+        <div class="card body">
+            <table class="table text-center tableStock table-hover" style="width:100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Date d'entrée</th>
+                        <th>Date d'expiration</th>
+                        <th>quantité</th>
+                        <th>Lieux de stockage</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lots in allLots %}
+                        <tr>
+                            <form action="{{path('article_modif_lots', {'id': lots.id})}}" method="POST">
+                                <td><input type="text" class="form-control" name="lotNumber" value="{{lots.number}}"></td>
+                                <td><input type="date" class="form-control" name="dateEnter" value="{{lots.dateEnter | date('Y-m-d')}}" disabled></td>
+                                {% if lots.dateExp != null %}
+                                    <td><input type="date" class="form-control" name="dateExp" value="{{lots.dateExp | date('Y-m-d')}}" disabled></td>
+                                {% else %}
+                                    <td><input type="date" class="form-control" name="dateExp" disabled></td>
+                                {% endif %}
+                                <td><input type="decimal" class="form-control" name="lotQuantity" value="{{lots.quantity}}"></td>
+                                <td><input type="text" class="form-control" name="lotPlace" value="{{lots.place}}"></td>
+                            <td class="d-flex">
+                                <button type="submit" class="btn action_button mr-1"><i class="fas fa-edit"></i></button>
+                            </form>
+                                <form action="{{path('article_delete_lots', {'id': lots.id})}}" method="POST"
+                                    style="display:inline-block">
+                                    <button type="submit" class="btn action_button"
+                                        onclick="return confirm('Confirmer la suppresion ?')"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    <input type="hidden" name="_token" value="{{csrf_token('SUP' ~ lots.id)}}">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if isEdit %}
+        <div class="card shadow my-4 mr-5">
+            <h5 class="title card-header">Image(s) liées à cet article:</h5>
+            <div class="p-3 row">
+                {% for image in article.images %}
+                <div class="col-6 mb-3">
+                    <img class="imgPrev" src="{{ asset('uploads/' ~ image.name)}}" alt="image-{{image.id}}"
+                        width="160" height="170">
+                    <a class="delImg" href="{{ path('article_delete_image', {id: image.id}) }}" data-delete
+                        data-token="{{ csrf_token('delete' ~ image.id) }}"><i class="fas fa-trash"></i></a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+    {% endif %}
+    
 
 
     {# SOLD A PRODUCT #}
     {% include "User/partials/scanner_modal.html.twig" %}
     {# END SOLD A PRODUCT #}
 </div>
+{% include "User/workshop_stock/partials/_modalLots.html.twig" %}
 {% endblock %}
-
 {% block javascripts %}
 {# {% include "User/partials/products_datepicker.html.twig" %} #}
 <script>
@@ -265,11 +353,11 @@ Ajout d'un article :
     })
 </script>
 <script>
-    $('.custom-file-input').on('change', function(event) {
+    $('.custom-file-input').on('change', function (event) {
         var inputFile = event.currentTarget;
         $(inputFile).parent()
-        .find('.custom-file-label')
-        .html(inputFile.files[0].name);
+            .find('.custom-file-label')
+            .html(inputFile.files[0].name);
     });
 </script>
 {% endblock %}

@@ -32,8 +32,9 @@ class StockByDay extends Command{
 
     protected function execute(InputInterface $input, OutputInterface $output){
 
-        $users = $this->manager->createQuery('SELECT c.id, COUNT(a) as quantity, SUM(a.referenceprice) as value from App\Entity\Article a join a.client c where a.isvisible = ?1 and a.leftdate IS NULL GROUP BY c.id')
+        $users = $this->manager->createQuery('SELECT c.id, SUM(a.quantity) as quantity, SUM(a.totalPrice) as value from App\Entity\Article a join a.client c where a.isvisible = ?1 and a.productStatus = ?2 GROUP BY c.id')
             ->setParameter(1, 1)
+            ->setParameter(2, 1)
             ->getResult();
 
         foreach ($users as $datssq) {

@@ -169,6 +169,9 @@
     "phpoffice/phpspreadsheet": {
         "version": "1.12.0"
     },
+    "picqer/php-barcode-generator": {
+        "version": "v2.2.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },

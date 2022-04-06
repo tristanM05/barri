@@ -2,27 +2,36 @@
 
 {% block title %}Vente atelier{% endblock %}
 
-{% block body %}
 
-    <div class="container pb-5" onclick="functionTest(2)">
-        <div class="row">
+{% block body %}
+    <div class="container-fluid pb-5 d-flex justify-content-center" onclick="functionTest(2)">
+        <div class="">
             <div class="text-center titlesold">
                 <img src="{{ asset('build/data/soldtitle.png') }}" alt="Login_image" class="img-fluid TitleBan2">
             </div>
-            <div class="col-12 divsold">
+            <div class="divsold">
                 {# DISPLAYS THE FLASH MESSAGES #}
                     {% include "Partials/flash_message.html.twig" %}
                 {# END DISPLAYS THE FLASH MESSAGES #}
+                <div class="d-flex">
+                    <div class="">
+                        <a role="button" class="action_button btn" data-toggle="modal" data-target="#modalSoldProduct"id="sold_product"> Vendre un produit</a>
+                    </div>
+                    <div class=" ml-auto">
+                        <a href="{{path('journal')}}" class="action_button btn">Journal de caisse</a>
+                    </div>
+                </div>
 
-                <a role="button" class="sold_button btn text-light" data-toggle="modal" data-target="#modalSoldProduct"id="sold_product"><i class="fas fa-plus"></i> Vendre un article</a>
-
-                <div class="border mt-5 justify-content-center" id="contenu">
+                <div class="border mt-3 justify-content-center" id="contenu">
                     {% if articles | length > 0 %}
                         <table class="table text-center" style="width:100%;">
                             <thead>
                                 <tr>
+                                    <th>Identifiant</th>
                                     <th>Nom</th>
                                     <th>Prix (€)</th>
+                                    <th>quantité</th>
+                                    <th>Lots</th>
                                     <th>Prix spécial (€)</th>
                                     <th>Date de vente</th>
                                     <th>Supprimer</th>
@@ -32,9 +41,48 @@
                             {% set somme = 0 %}
                                 {% for article in articles %}
                                     <tr class="border">
-                                    
+                                        <td>{{article.article.number}}</td>
                                         <td>{{article.article.designation}}</td>
                                         <td>{{article.article.referenceprice}}</td>
+
+                                        {# QUANTITY #}
+                                        <div class="div_input{{article.article.id}}">
+                                            <td 
+                                                id="article_quantity{{article.article.id}}"
+                                                ondblclick="modify2({{article.article.id}})" style="display:none;">
+                                                {{article.article.quantity}}
+                                            </td>
+                                            <td id="input2{{article.article.id}}" class="td_width"  >
+                                                <form action="{{ path('user_sold_article') }}" method="POST" onkeydown="return event.key != 'Enter';">
+                                                    <input type="number" 
+                                                    class="form-control ml-5" 
+                                                    id="inputValue2{{article.article.id}}"
+                                                    name="quantity{{article.article.id}}"
+                                                    style="width:50%" 
+                                                    value="{{article.article.quantity}}" onchange="functionTest2({{article.article.id}})">
+                                            </td>
+                                        </div>
+                                        {# QUANTITY #}
+                                        <div>
+                                            <td class="div_input{{article.article.id}}">  
+                                                <select name="lotNumber" id="lotNumber" class="form-control">
+                                                    {% for lot in article.article.lots %}
+                                                        {% if lot.quantity > 0 %} 
+                                                            <option value="{{lot.number}}">{{lot.number}} <span id="lotQuantity">(x{{lot.quantity}})</span></option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                                <select name="lotNumber2" id="lotNumber2" class="form-control">
+                                                    <option value="">--Lot supplémentaire--</option>
+                                                    {% for lot in article.article.lots %}
+                                                        {% if lot.quantity > 0 %}  
+                                                            <option value="{{lot.number}}">{{lot.number}} <span id="lotQuantity2">(x{{lot.quantity}})</span></option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </div>
+                                        {# SPECIAL PRICE #}
                                         <div class="div_input{{article.article.id}}">
                                             <td 
                                                 id="special_price{{article.article.id}}"
@@ -42,7 +90,6 @@
                                                 {{article.article.specialprice}}
                                             </td>
                                             <td id="input{{article.article.id}}" class="td_width"  >
-                                                <form action="{{ path('user_sold_article') }}" method="POST" onkeydown="return event.key != 'Enter';">
                                                     <input type="text" 
                                                     class="form-control ml-5" 
                                                     id="inputValue{{article.article.id}}"
@@ -50,6 +97,8 @@
                                                     style="width:50%" 
                                                     value="{{article.article.specialprice}}" onchange="functionTest({{article.article.id}})">
                                         </div>
+                                        {# SPECIAL PRICE #}
+
                                         <td class="td_width">
                                             <input type="text" class="form-control" id="soldArticle{{article.article.id}}" value="{{dateNow}}" name="datede{{article.article.id}}">
                                         </td>
@@ -59,9 +108,9 @@
                                     </tr>
                                     
                                     {% if article.article.specialprice %}
-                                        {% set somme = somme+ article.article.specialprice %}
+                                        {% set somme = somme+ article.article.specialprice * article.article.quantity %}
                                     {% else %}
-                                        {% set somme = somme+ article.article.referenceprice %}
+                                        {% set somme = somme+ article.article.referenceprice * article.article.quantity %}
                                     {% endif %}
                                     
                                 {% endfor %} 
@@ -71,8 +120,10 @@
                         <table class="table text-center" style="width:100%;">
                             <thead class="text-ligth">
                                 <tr>
+                                    <th>Identifiant</th>
                                     <th>Nom</th>
                                     <th>Prix (€)</th>
+                                    <th>quantité</th>
                                     <th>Prix spécial (€)</th>
                                     <th>Date de vente</th>
                                     <th>Supprimer</th>
@@ -87,29 +138,54 @@
                         
                     {% endif %}
                 </div>
-                <div class="row">
-                    <div class="col-6 d-flex justify-content-start">
-                        <a href="{{path('user_cancel_sale')}}" class="btn action_button mt-5">Annuler la vente</a>
+                <div class="d-flex">
+                    <textarea class="form-control commentVente" id="comment" name="comment" rows="3" style="width: 30%" placeholder="Commenter la vente (optionel)"></textarea>
+
+                    <div class="divPayment">
+                        <div class="payment">
+                            <label for=""><i onMouseOver="displayDivInfo('Carte bancaire');" onMouseOut="displayDivInfo()" class="fab fa-cc-mastercard fa-2x"></i></label>
+                            <input type="number" step="any" class="form-control" id="cb" name="cb" style="width: 70%" value="">
+                            <p id="sum_count2">{{somme}}</p>
+                        </div>
+                        <div class="payment">
+                            <label for=""><i onMouseOver="displayDivInfo('Espèces');" onMouseOut="displayDivInfo()" class="fas fa-coins fa-2x"></i></label>
+                            <input type="number" step="any" class="form-control" id="esp" name="esp" style="width: 70%">
+                        </div>
+                        <div class="payment">
+                            <label for=""><i onMouseOver="displayDivInfo('Chèques bancaire');" onMouseOut="displayDivInfo()" class="fas fa-money-check fa-2x"></i></label>
+                            <input type="number" step="any" class="form-control" id="chq" name="chq" style="width: 70%">
+                        </div>
+                        <div onMouseOver="displayDivInfo('Autres moyens de paiement');" onMouseOut="displayDivInfo()" class="payment">
+                            <label for="">Autres</i></label>
+                            <input type="number" step="any" class="form-control" id="other" name="other" style="width: 70%">
+                        </div>
                     </div>
-                    <div class="col-6 d-flex justify-content-end">
+                    <div class="d-flex ml-auto divBtnVente">
                         {% if articles %}
-                            <h2 class="text-dark">TOTAL A PAYER : <strong id="sum_count">{{somme}}</strong><strong> € </strong></h2>
-                            <button type="submit" class="btn action_button mt-5" onclick="return confirm('Voulez-vous valider la vente ?')">Valider la vente</button >
+                            <button type="submit" class="btn action_button mt-3 btnVente" onclick="return confirm('Voulez-vous valider la vente ')">Valider la vente</button >
                             </form>
                         {% else %}
-                            <button type="button" class="btn action_button mt-5" 
+                            <button type="button" class="btn action_button mt-3 btnVente"
                             onclick="return confirm('Veuillez d\'abord sélectionner un article à vendre')">Valider la vente</button>
                         {% endif %}
-                        
                     </div>
                 </div>
-                
-                
+                <div>
+                    {% if articles %}
+                        <div class="d-flex">
+                            <div id="divPriceVente" class="ml-auto">
+                                <p class=" mr-2" id="priceVente">TOTAL A PAYER : <strong id="sum_count">{{somme}} €</strong></p>
+                            </div>
+                        </div>
+                    {% else %}
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% include "User/article/sold_products.html.twig" %}
     </div>
 
+    {% include "User/partials/sold_products_datepicker.html.twig" %}
 {% endblock %}
 
 {% block javascripts %}
@@ -140,21 +216,102 @@
             var sum = Number(0);
             {% for article in articles %}
                 test = Number(document.getElementById("special_price" + {{article.article.id}}).innerHTML);
+                test2 = Number(document.getElementById("article_quantity" + {{article.article.id}}).innerHTML);
 
                 referenceprice = {{article.article.referenceprice}};
+                quantity = {{article.article.quantity}};
 
                 if(test){
-                    sum = sum + test
+                    sum = sum + test * test2
                 } else if(input_value == 0 && input_value.length == 1){
                     sum = sum + 0;
                 }else{
-                    sum = sum + referenceprice
+                    sum = sum + test * test2
                 }
                 sum = Math.round(sum*100)/100;
                 
                 document.getElementById("sum_count").innerHTML = sum;
+                document.getElementById("sum_count2").innerHTML = sum;
             {% endfor %}
         };
 
+            function modify2(data){
+            $("#article_quantity"+ data).hide();
+            $("#input2"+ data).show();
+            $("#inputValue2"+ data).focus();
+            input_value = document.getElementById("inputValue2" + data).value;
+            document.getElementById("article_quantity"+ data).innerHTML = input_value;
+        };
+        
+        function functionTest2(id){
+
+            $("#article_quantity" + id).show();
+            $("#input2"+ id).hide();
+            
+            //input = document.getElementById("special_price");
+            input_value = document.getElementById("inputValue2" + id).value;
+            document.getElementById("article_quantity" + id).innerHTML = input_value;
+            document.getElementById("keepQuantity"+ id).value = input_value;
+            
+
+            var sum = Number(0);
+            {% for article in articles %}
+                test = Number(document.getElementById("article_quantity" + {{article.article.id}}).innerHTML);
+                test2 = Number(document.getElementById("special_price" + {{article.article.id}}).innerHTML);
+
+                quantity = {{article.article.quantity}};
+                referenceprice = {{article.article.referenceprice}};
+
+                if(test){
+                    sum = sum + test * referenceprice
+                } else if(input_value == 0 && input_value.length == 1){
+                    sum = sum + 0;
+                }else{
+                    sum = sum + quantity * test2;
+                }
+                sum = Math.round(sum*100)/100;
+                
+                document.getElementById("sum_count").innerHTML = sum;
+                document.getElementById("sum_count2").innerHTML = sum;
+            {% endfor %}
+        };
     </script>
+    <script>
+        const p = document.querySelector('#sum_count2');
+        const cb = document.querySelector('#cb');
+
+        cb.addEventListener('click', () => {
+        p.style.display = "none";
+        })
+        p.addEventListener('click', () => {
+            p.style.display = "none";
+            $("#cb").trigger("focus");
+        })
+    </script>
+        <script>
+        function displayDivInfo(text){
+            if(text){
+                //Détection du navigateur
+                is_ie = (navigator.userAgent.toLowerCase().indexOf("msie") != -1) && (navigator.userAgent.toLowerCase().indexOf("opera") == -1);
+                
+                //Création d'une div provisoire
+                var divInfo = document.createElement('div');
+                divInfo.style.position = 'absolute';
+                document.onmousemove = function(e){
+                    x = (!is_ie ? e.pageX-window.pageXOffset : event.x+document.body.scrollLeft);
+                    y = (!is_ie ? e.pageY-window.pageYOffset : event.y+document.body.scrollTop);
+                    divInfo.style.left = x+15+'px';
+                    divInfo.style.top = y+15+'px';
+                    divInfo.style.color = '#113d3e';
+                }
+                divInfo.id = 'divInfo';
+                divInfo.innerHTML = text;
+                document.body.appendChild(divInfo);
+            }
+            else{
+                document.onmousemove = '';
+                document.body.removeChild(document.getElementById('divInfo'));
+            }
+        }
+</script>
 {% endblock %}

@@ -1,0 +1,50 @@
+
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" id="modalVente" role="dialog"
+    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dna" role="document" style="width:100%">
+        <div class="modal-content text-center justify-content-center">
+            <div class="modal-header d-flex">
+                <h5 class="modal-title title" id="exampleModalCenterTitle">Historique des ventes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body justify-content-center">
+                <div class="d-flex">
+                    {% if vente == [] %}
+                        <button type="button" class="btn action_button" onclick="return confirm('Vous n\'avez pas d\'article à exporter')">Export tableur</button>
+                    {% else %}
+                        <a href="{{ path('soldArticleCSV') }}" class="btn action_button mb-2">Export tableur</a>
+                    {% endif %}
+                    <p class="ml-auto" id="totalSold">
+                        total des recettes:
+                        {% if allSoldArticle['soldArticle'].0['SUM'] %}
+                            <strong>{{allSoldArticle['soldArticle'].0['SUM']|number_format(2, '.',' ')}} &euro;</strong>
+                        {% else %}
+                            0 &euro;
+                        {% endif %}
+                    </p>
+                </div>
+                <table class="table text-center" style="width:100%">
+                    <thead class="thead-dark">
+                        <th>Article</th>
+                        <th>Code</th>
+                        <th>Date de vente</th>
+                        <th>Quantité vendu</th>
+                        <th>Total</th>
+                    </thead>
+                    {% for v in vente %}
+                        <tbody>
+                            <td>{{v.article.designation}}</td>
+                            <td>{{v.article.number}}</td>
+                            <td><strong>{{v.dateVente | date('d/m/Y à H:i')}}</strong></td>
+                            <td>{{v.quantity}}</td>
+                            <td><strong>{{v.price}}</strong></td>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

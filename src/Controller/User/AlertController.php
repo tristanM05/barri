@@ -18,20 +18,20 @@ class AlertController extends AbstractController
      * affiche les produit possédant une date d'alerte pour l'expiration
      * @Route("/user/alert", name="alert")
      */
-    public function alert1(DashboardUserService $service, ArticleRepository $repo)
-    {
-        $now = new \DateTime('now');
-        $now->setTime(0,0,0);
-        $client = $this->getUser()->getId();
-        $email = $this->getUser();
-        $article = $repo->findBy(['client' => $client, 'dateLimit' => $now, 'productStatus' => 1]);
+    // public function alert1(DashboardUserService $service, ArticleRepository $repo)
+    // {
+    //     $now = new \DateTime('now');
+    //     $now->setTime(0,0,0);
+    //     $client = $this->getUser()->getId();
+    //     $email = $this->getUser();
+    //     $article = $repo->findBy(['client' => $client, 'dateLimit' => $now, 'productStatus' => 1]);
 
-        return $this->render('alert/index.html.twig', [
-            'article' => $article,
-            // 'interval' => $interval,
-            'email' => $email->getEmail()
-        ]);
-    }
+    //     return $this->render('alert/index.html.twig', [
+    //         'article' => $article,
+    //         // 'interval' => $interval,
+    //         'email' => $email->getEmail()
+    //     ]);
+    // }
 
     // /**
     //  * affiche les produit dont la date d'expiration est dépasser
@@ -57,7 +57,7 @@ class AlertController extends AbstractController
      */
     public function expired(DashboardUserService $service){
         $now = new \DateTime('now');
-        $now->setTime(0,0,0);
+        // $now->setTime(0,0,0);
         $client = $this->getUser()->getId();
         $article = $service->getExpired($client, $now);
 
